@@ -17,14 +17,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#include "inputManager.h"
-#include "inputManager_s.h"
+#include "inputManager.h"
+
+class Teller: public object_t {
+  size_t _id;
+  public:
+    Teller() { static int id = 0; _id = id++; }
+    void update(const event_t& ev) {cout << "Observer " << _id << " catched event " << ev << endl;};
+};
 
 int main()
 {
   inputManager& buttonManager = inputManager::getInstance();
 
-  observer_t Obs0, Obs1;
+  Teller Obs0, Obs1;
 
   cout << "First load" << endl;
   buttonManager.bind(Obs0, event_t::N);

@@ -19,8 +19,8 @@
  */
 
 
-#ifndef inputManager_s_h
-#define inputManager_s_h
+#ifndef inputManager_h
+#define inputManager_h
 
 //Commemt all these for Arduino
 #include <cinttypes>
@@ -48,12 +48,10 @@ enum event_t {N,W,S,E,C};
 ostream& operator<<(ostream& os, const event_t& ev);
 
 class observer_t {
-  size_t _id;
-
   public:
-    observer_t() { static int id = 0; _id = id++; }
-
-    void update(const event_t& ev) {cout << "Observer " << _id << " catched event " << ev << endl;};
+    // pure virtual function providing interface framework.
+    virtual ~observer_t() {}
+    virtual void update(const event_t& ev) = 0;
 };
 
 struct memoryNode {

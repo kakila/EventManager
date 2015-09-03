@@ -19,7 +19,7 @@
  */
 
 
-#include "inputManager_s.h"
+#include "inputManager.h"
 
 uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
 
