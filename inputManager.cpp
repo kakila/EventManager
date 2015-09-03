@@ -34,6 +34,8 @@ void inputManager::bind(const observer_t& observer, const event_t& ev)
 
 void inputManager::unbind(const observer_t& observer, const event_t& ev)
 {
+  if (first_observer[ev] == nullptr)
+    return;
   observer_t * ptr = const_cast<observer_t *>(&observer);
   if (ptr == first_observer[ev]->obs)
   {

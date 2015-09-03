@@ -88,10 +88,15 @@ int main()
   buttonManager.notify();
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    assertTrue(observers[i].wasCalled(), std::string("Third Assert Failed: Observer ") + std::to_string(i) + std::string(" wasn't called"));
+    assertFalse(observers[i].wasCalled(), std::string("Third Assert Failed: Observer ") + std::to_string(i) + std::string(" was called but it wasn't supposed to"));
     observers[i].reset();
   }
 
+  //Bind all except number 3
+  for (int i = 0; i<MAX_OBSERVERS; i++)
+  {
+    buttonManager.bind(observers[i], event_t::N);
+  }
   buttonManager.unbind(observers[3], event_t::N);
   buttonManager.notify();
 
