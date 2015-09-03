@@ -19,7 +19,8 @@
 // Based on mock_arduino, adapted for the dwenguino
 
 #include <sys/timeb.h>
-#include "mock_arduino.h"
+#include "mock_dwenguino.h"
+
 
 timeb t_start;
 unsigned long millis() {
@@ -35,4 +36,10 @@ void delay(unsigned long ms) {
 
 void initialize_mock_arduino() {
   ftime(&t_start);
+}
+
+bool pressed = true;
+uint8_t digitalRead(uint8_t pin)
+{
+    return pressed?PRESSED:NOT_PRESSED;
 }

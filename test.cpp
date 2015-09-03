@@ -1,7 +1,8 @@
 /*
  * test.cpp
  *
- * Copyright (C) 2015 - juanpi
+ * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
+ * Copyright (C) 2015 - Ezequiel Pozzo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public
@@ -16,6 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "test.h"
 #include "string"
 
@@ -35,12 +37,6 @@ bool TestObserver::wasCalled()
 void TestObserver::reset()
 {
     m_wasCalled = false;
-}
-
-bool pressed = true;
-uint8_t digitalRead(unsigned int pin)
-{
-    return pressed?PRESSED:NOT_PRESSED;
 }
 
 void assertTrue(bool condition, std::string message)

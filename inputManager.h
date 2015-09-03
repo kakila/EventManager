@@ -22,7 +22,9 @@
 #ifndef inputManager_h
 #define inputManager_h
 
-extern uint8_t digitalRead(unsigned int);
+#ifndef ARDUINO_MAIN
+#include "mock_dwenguino.h"
+#endif
 
 #ifndef MAX_OBS
 #define MAX_OBSERVERS 10

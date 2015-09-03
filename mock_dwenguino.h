@@ -49,6 +49,8 @@ static const uint8_t SW_W = 19;
 #define PRESSED 1
 #define NOT_PRESSED 0
 
+extern bool pressed;
+uint8_t digitalRead(uint8_t);
 
 typedef unsigned char byte;
 typedef unsigned short int word;
@@ -61,5 +63,6 @@ unsigned long millis();
 long map(long, long, long, long, long);
 
 void initialize_mock_arduino();
+
 
 #endif
