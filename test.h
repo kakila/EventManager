@@ -25,9 +25,22 @@ class TestObserver: public observer_t {
   bool m_wasCalled = false;
   public:
     TestObserver();
-    void notify(const event_t& ev);
+    void notify(const Event* ev);
     bool wasCalled();
     void reset();
+};
+
+class TestEvent: public Event {
+  public:
+    TestEvent(){};
+    const int get_type() {return -1;};
+};
+
+class TestEventPub: public Event_Publisher {
+  public:
+    TestEventPub(){};
+    bool is_triggered() {return false;};
+    const Event* get_event(){return nullptr;};
 };
 
 class TestInputManager : public inputManager {

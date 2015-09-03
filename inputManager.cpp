@@ -36,7 +36,7 @@ void inputManager::bind(const observer_t& observer, const Event_Publisher& publi
 void inputManager::unbind(const observer_t& observer, const Event_Publisher& publisher)
 {
   int ev = find_publisher(publisher);
-  if (ev = -1 || first_observer[ev] == nullptr)
+  if (ev == -1 || first_observer[ev] == nullptr)
     return;
   observer_t * ptr = const_cast<observer_t *>(&observer);
   if (ptr == first_observer[ev]->obs)
@@ -54,7 +54,7 @@ void inputManager::unbind(const observer_t& observer, const Event_Publisher& pub
   else
   {
     // find the father of the node to unbind
-    memoryNode *parent = find (ptr, ev);
+    memoryNode *parent = find_observer (ptr, ev);
     if (parent == nullptr)
       return;
 
@@ -83,9 +83,9 @@ void inputManager::update()
   memoryNode *node;
   for (unsigned int i=0; i<MAX_EVENTS; i++)
   {
-    if (event_types[i].is_triggered())
+    if (registered_publishers[i]->is_triggered())
     {
-      Event new_event = event_types[i].get_event();
+      const Event* new_event = registered_publishers[i]->get_event();
       node = first_observer[i];
       while (node != nullptr)
       {
@@ -96,7 +96,7 @@ void inputManager::update()
   }
 }
 
-memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
+memoryNode* inputManager::find_observer(const observer_t * observer,  const int& ev)
 {
   swap = first_observer[ev];
   while (swap->nxt != nullptr)
@@ -106,18 +106,4 @@ memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
     swap = swap->nxt;
   }
   return nullptr;
-}
-
-ostream& operator<<(ostream& os, const event_t& ev)
-{
-    switch(ev)
-    {
-        case N: os << "N"; break;
-        case W: os << "W"; break;
-        case S: os << "S"; break;
-        case E: os << "E"; break;
-        case C: os << "C"; break;
-        default : os.setstate(ios_base::failbit);
-    }
-    return os;
 }

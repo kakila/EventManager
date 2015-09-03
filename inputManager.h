@@ -38,14 +38,14 @@ class Event
 {
 public:
   virtual ~Event() {}
-  virtual char* get_type() = 0;
+  virtual const int get_type() = 0;
 };
 
 class Event_Publisher {
 public:
   virtual ~Event_Publisher() {}
-  virtual bool is_trigered();
-  virtual const Event* get_event();
+  virtual bool is_triggered() = 0;
+  virtual const Event* get_event() = 0;
 };
 
 
@@ -53,7 +53,7 @@ class observer_t {
   public:
     // pure virtual function providing interface framework.
     virtual ~observer_t() {}
-    virtual void notify(const Event& ev) = 0;
+    virtual void notify(const Event* ev) = 0;
 };
 
 struct memoryNode {
@@ -75,7 +75,9 @@ class inputManager {
     void update();
 
   private:
-    memoryNode* find(const observer_t * observer,  const event_t& ev);
+    memoryNode* find_observer (const observer_t * observer, const int& event);
+    int add_publisher (const Event_Publisher& publisher){return -1;};
+    int find_publisher (const Event_Publisher& publisher){return -1;};
 
   // Singelton pattern
   public:

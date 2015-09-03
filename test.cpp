@@ -25,7 +25,7 @@ TestObserver::TestObserver()
 {
     static int id = 0; _id = id++;
 }
-void TestObserver::update(const event_t& ev)
+void TestObserver::notify(const Event* ev)
  {
      m_wasCalled = true;
 }
@@ -58,12 +58,14 @@ int main()
 
   TestObserver observers[MAX_OBSERVERS] {};
 
+  TestEventPub event1;
+
   cout << "First load" << endl;
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    buttonManager.bind(observers[i], event_t::N);
+    buttonManager.bind(observers[i], event1);
   }
-  buttonManager.notify();
+  buttonManager.update();
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
@@ -72,7 +74,7 @@ int main()
   }
 
   pressed = false;
-  buttonManager.notify();
+  buttonManager.update();
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
@@ -82,10 +84,10 @@ int main()
 
   cout << endl;
   cout << "Reset and reload" << endl;
-  buttonManager.reset();
+  buttonManager.clear();
   pressed = true;
 
-  buttonManager.notify();
+  buttonManager.update();
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
     assertFalse(observers[i].wasCalled(), std::string("Third Assert Failed: Observer ") + std::to_string(i) + std::string(" was called but it wasn't supposed to"));
@@ -95,10 +97,10 @@ int main()
   //Bind all except number 3
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    buttonManager.bind(observers[i], event_t::N);
+    buttonManager.bind(observers[i], event1);
   }
-  buttonManager.unbind(observers[3], event_t::N);
-  buttonManager.notify();
+  buttonManager.unbind(observers[3], event1);
+  buttonManager.update();
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
@@ -113,34 +115,10 @@ int main()
   }
 
   //Test dangerous stuff
-  buttonManager.reset();
-  buttonManager.reset();
-  buttonManager.unbind(observers[0], event_t::N);
+  buttonManager.clear();
+  buttonManager.clear();
+  buttonManager.unbind(observers[0], event1);
 
   cout << "All tests successful" << endl;
   return 0;
-/*  buttonManager.bind(Obs0, event_t::N);
-  buttonManager.bind(Obs0, event_t::W);
-  buttonManager.bind(Obs1, event_t::N);
-  buttonManager.bind(Obs1, event_t::W);
-
-  buttonManager.notify();
-
-  cout << endl;
-  cout << "Unbind" << endl;
-  buttonManager.unbind(Obs0, event_t::N); buttonManager.unbind(Obs0, event_t::N);
-  buttonManager.unbind(Obs0, event_t::W);
-  buttonManager.unbind(Obs1, event_t::N);
-
-  buttonManager.notify();
-
-  cout << endl;
-  cout << "Reconfigure" << endl;
-  buttonManager.bind(Obs0, event_t::W);
-  buttonManager.bind(Obs0, event_t::E);
-  buttonManager.bind(Obs1, event_t::S);
-
-  buttonManager.notify();
-
-  return 0;*/
 }
