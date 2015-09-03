@@ -112,6 +112,11 @@ int main()
     }
   }
 
+  //Test dangerous stuff
+  buttonManager.reset();
+  buttonManager.reset();
+  buttonManager.unbind(observers[0], event_t::N);
+
   cout << "All tests successful" << endl;
   return 0;
 /*  buttonManager.bind(Obs0, event_t::N);
