@@ -64,12 +64,12 @@ struct memoryNode {
 class inputManager {
   memoryNode registered_observers[MAX_OBSERVERS];
   memoryNode *first_observer[MAX_EVENTS];
-
-  size_t end;
+  memoryNode *first_free;
+  memoryNode *swap;
 
   public:
     void bind(const observer_t& observer, const event_t& ev);
-    void clear();
+    void reset();
     void notify();
 
   // Singelton pattern
@@ -81,7 +81,12 @@ class inputManager {
     }
 
    private:
-        inputManager() {end = 0;}; // Constructor? (the {} brackets) are needed here.
+        inputManager()
+        {
+          for (size_t i =0; i<MAX_OBSERVERS-1; i++)
+            registered_observers[i].nxt = (registered_observers + (i+1));
+          first_free = &registered_observers[0];
+        }; // Constructor? (the {} brackets) are needed here.
 };
 
 

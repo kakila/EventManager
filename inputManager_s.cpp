@@ -25,25 +25,34 @@ uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
 
 void inputManager::bind(const observer_t& observer, const event_t& ev)
 {
-  observer_t *ptr = const_cast<observer_t *>(&observer);
+  swap = first_free;             // Copy free ptr
+  first_free = swap->nxt;        // move free ptr
 
-  registered_observers[end].obs = ptr;
-  registered_observers[end].nxt = first_observer[ev];
-  first_observer[ev]            = &registered_observers[end];
-  end++;
+  swap->obs = const_cast<observer_t *>(&observer);  // set obs in previously free ptr
+  swap->nxt = first_observer[ev];                   // Point next to current first observer
+  first_observer[ev] = swap;                        // Set current as first observer
 }
 
-void inputManager::clear()
+void inputManager::unbind(const observer_t& observer, const event_t& ev)
 {
-  end = 0;
-  for (size_t i=0; i < MAX_EVENTS; i++)
-    first_observer[i] = NULL;
-  for (size_t i=0; i < MAX_OBSERVERS; i++)
-  {
-    registered_observers[i].obs = NULL;
-    registered_observers[i].nxt = NULL;
-  }
+  //NOT FINISHED
+  memoryNode *swap2 = find (const_cast<observer_t *>(&observer), ev);
 
+  swap       = swap2->nxt;
+  swap2->nxt = swap->nxt;
+
+  swap->nxt  = first_free;
+  swap->obs  = NULL;
+  first_free = swap;
+}
+
+void inputManager::reset()
+{
+  for (size_t i =0; i<MAX_OBSERVERS-1; i++)
+    registered_observers[i].nxt = (registered_observers + (i+1));
+  first_free = &registered_observers[0];
+  for (size_t i =0; i<MAX_EVENTS; i++)
+    first_observer[i] = NULL;
 }
 
 void inputManager::notify()
@@ -72,6 +81,15 @@ void inputManager::notify()
         node = node->nxt;
       }
     }
+  }
+}
+
+memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
+{
+  swap = first_observer[ev];
+  while (swap != NULL)
+  {
+    if (swap->nxt == )
   }
 }
 

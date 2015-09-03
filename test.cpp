@@ -25,6 +25,7 @@ int main()
   inputManager& buttonManager = inputManager::getInstance();
 
   observer_t Obs0, Obs1;
+
   buttonManager.bind(Obs0, event_t::N);
   buttonManager.bind(Obs0, event_t::S);
 
@@ -36,7 +37,7 @@ int main()
 
   buttonManager.notify();
 
-  buttonManager.clear();
+  buttonManager.reset();
   buttonManager.bind(Obs0, event_t::N);
   buttonManager.bind(Obs0, event_t::W);
   buttonManager.bind(Obs1, event_t::N);
