@@ -22,8 +22,9 @@
 
 uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
 
-void inputManager::bind(const observer_t& observer, const event_t& ev)
+void inputManager::bind(const observer_t& observer, const Event_Publisher& publisher)
 {
+  int ev = add_publisher(publisher);
   swap = first_free;             // Copy free ptr
   first_free = swap->nxt;        // move free ptr
 
@@ -32,9 +33,10 @@ void inputManager::bind(const observer_t& observer, const event_t& ev)
   first_observer[ev] = swap;                        // Set current as first observer
 }
 
-void inputManager::unbind(const observer_t& observer, const event_t& ev)
+void inputManager::unbind(const observer_t& observer, const Event_Publisher& publisher)
 {
-  if (first_observer[ev] == nullptr)
+  int ev = find_publisher(publisher);
+  if (ev = -1 || first_observer[ev] == nullptr)
     return;
   observer_t * ptr = const_cast<observer_t *>(&observer);
   if (ptr == first_observer[ev]->obs)
@@ -67,7 +69,7 @@ void inputManager::unbind(const observer_t& observer, const event_t& ev)
   }
 }
 
-void inputManager::reset()
+void inputManager::clear()
 {
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
@@ -76,29 +78,18 @@ void inputManager::reset()
     first_observer[i] = nullptr;
 }
 
-void inputManager::notify()
+void inputManager::update()
 {
-  event_t ev;
   memoryNode *node;
   for (unsigned int i=0; i<MAX_EVENTS; i++)
   {
-   // Check for onpress events
-    if (digitalRead(button[i]) == PRESSED)
+    if (event_types[i].is_triggered())
     {
-      // FIXME: how to do this?
-      switch (button[i])
-      {
-        case SW_N: ev  = N; break;
-        case SW_W: ev  = W; break;
-        case SW_S: ev  = S; break;
-        case SW_E: ev  = E; break;
-        case SW_C: ev  = C; break;
-      }
-
-      node = first_observer[ev];
+      Event new_event = event_types[i].get_event();
+      node = first_observer[i];
       while (node != nullptr)
       {
-        node->obs->update(ev);
+        node->obs->notify(new_event);
         node = node->nxt;
       }
     }

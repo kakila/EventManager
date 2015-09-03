@@ -25,7 +25,7 @@ class TestObserver: public observer_t {
   bool m_wasCalled = false;
   public:
     TestObserver();
-    void update(const event_t& ev);
+    void notify(const event_t& ev);
     bool wasCalled();
     void reset();
 };

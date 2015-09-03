@@ -34,15 +34,26 @@
 #define MAX_EVENTS 5
 #endif
 
-// FIXME: user defined events? So far MAX_EVENTS pased at compile time makes no sense.
-enum event_t {N,W,S,E,C};
-ostream& operator<<(ostream& os, const event_t& ev);
+class Event
+{
+public:
+  virtual ~Event() {}
+  virtual char* get_type() = 0;
+};
+
+class Event_Publisher {
+public:
+  virtual ~Event_Publisher() {}
+  virtual bool is_trigered();
+  virtual const Event* get_event();
+};
+
 
 class observer_t {
   public:
     // pure virtual function providing interface framework.
     virtual ~observer_t() {}
-    virtual void update(const event_t& ev) = 0;
+    virtual void notify(const Event& ev) = 0;
 };
 
 struct memoryNode {
@@ -55,12 +66,13 @@ class inputManager {
   memoryNode *first_observer[MAX_EVENTS];
   memoryNode *first_free;
   memoryNode *swap;
+  Event_Publisher *registered_publishers[MAX_EVENTS];
 
   public:
-    void bind(const observer_t& observer, const event_t& ev);
-    void unbind(const observer_t& observer, const event_t& ev);
-    void reset();
-    void notify();
+    void bind(const observer_t& observer, const Event_Publisher& publisher);
+    void unbind(const observer_t& observer, const Event_Publisher& publisher);
+    void clear();
+    void update();
 
   private:
     memoryNode* find(const observer_t * observer,  const event_t& ev);
