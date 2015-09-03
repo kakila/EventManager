@@ -41,7 +41,7 @@ void inputManager::unbind(const observer_t& observer, const event_t& ev)
 
     // move current first observer to first_free
     first_observer[ev]->nxt = first_free;
-    first_observer[ev]->obs = NULL;
+    first_observer[ev]->obs = nullptr;
     first_free = first_observer[ev];
 
     // set swap as first observer
@@ -51,7 +51,7 @@ void inputManager::unbind(const observer_t& observer, const event_t& ev)
   {
     // find the father of the node to unbind
     memoryNode *parent = find (ptr, ev);
-    if (parent == NULL)
+    if (parent == nullptr)
       return;
 
     // Copy the node to unbind to swap and make the parent point to ther next node
@@ -60,7 +60,7 @@ void inputManager::unbind(const observer_t& observer, const event_t& ev)
 
     // The node ot unbind as first_free
     swap->nxt  = first_free;
-    swap->obs  = NULL;
+    swap->obs  = nullptr;
     first_free = swap;
   }
 }
@@ -71,7 +71,7 @@ void inputManager::reset()
     registered_observers[i].nxt = (registered_observers + (i+1));
   first_free = &registered_observers[0];
   for (size_t i =0; i<MAX_EVENTS; i++)
-    first_observer[i] = NULL;
+    first_observer[i] = nullptr;
 }
 
 void inputManager::notify()
@@ -94,7 +94,7 @@ void inputManager::notify()
       }
 
       node = first_observer[ev];
-      while (node != NULL)
+      while (node != nullptr)
       {
         node->obs->update(ev);
         node = node->nxt;
@@ -106,13 +106,13 @@ void inputManager::notify()
 memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
 {
   swap = first_observer[ev];
-  while (swap->nxt != NULL)
+  while (swap->nxt != nullptr)
   {
     if (swap->nxt->obs == observer)
       return swap;
     swap = swap->nxt;
   }
-  return NULL;
+  return nullptr;
 }
 
 ostream& operator<<(ostream& os, const event_t& ev)

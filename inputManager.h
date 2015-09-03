@@ -46,8 +46,8 @@ class observer_t {
 };
 
 struct memoryNode {
-  observer_t *obs = NULL;
-  memoryNode *nxt = NULL;
+  observer_t *obs = nullptr;
+  memoryNode *nxt = nullptr;
 };
 
 class inputManager {
