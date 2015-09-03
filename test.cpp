@@ -17,7 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "inputManager.h"
+//#include "inputManager.h"
+#include "inputManager_s.h"
 
 int main()
 {

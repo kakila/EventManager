@@ -19,8 +19,8 @@
  */
 
 
-#ifndef inputManager_h
-#define inputManager_h
+#ifndef inputManager_s_h
+#define inputManager_s_h
 
 //Commemt all these for Arduino
 #include <cinttypes>
@@ -58,7 +58,7 @@ class observer_t {
 
 struct memoryNode {
   observer_t *obs = NULL;
-  memoryNode *nxt[MAX_EVENTS] = {NULL};
+  memoryNode *nxt = NULL;
 };
 
 class inputManager {
@@ -71,9 +71,6 @@ class inputManager {
     void bind(const observer_t& observer, const event_t& ev);
     void clear();
     void notify();
-
-  private:
-    size_t find(const observer_t* observer);
 
   // Singelton pattern
   public:
