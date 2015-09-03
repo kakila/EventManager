@@ -19,8 +19,8 @@
  */
 
 
-#ifndef inputManager_s_h
-#define inputManager_s_h
+#ifndef inputManager_h
+#define inputManager_h
 
 //Commemt all these for Arduino
 #include <cinttypes>
@@ -58,23 +58,22 @@ class observer_t {
 
 struct memoryNode {
   observer_t *obs = NULL;
-  memoryNode *nxt = NULL;
+  memoryNode *nxt[MAX_EVENTS] = {NULL};
 };
 
 class inputManager {
   memoryNode registered_observers[MAX_OBSERVERS];
   memoryNode *first_observer[MAX_EVENTS];
-  memoryNode *first_free;
-  memoryNode *swap;
+
+  size_t end;
 
   public:
     void bind(const observer_t& observer, const event_t& ev);
-    void unbind(const observer_t& observer, const event_t& ev);
-    void reset();
+    void clear();
     void notify();
 
   private:
-    memoryNode* find(const observer_t * observer,  const event_t& ev);
+    size_t find(const observer_t* observer);
 
   // Singelton pattern
   public:
@@ -85,12 +84,7 @@ class inputManager {
     }
 
    private:
-        inputManager()
-        {
-          for (size_t i =0; i<MAX_OBSERVERS-1; i++)
-            registered_observers[i].nxt = (registered_observers + (i+1));
-          first_free = &registered_observers[0];
-        }; // Constructor? (the {} brackets) are needed here.
+        inputManager() {end = 0;}; // Constructor? (the {} brackets) are needed here.
 };
 
 

@@ -19,41 +19,60 @@
  */
 
 
-#include "inputManager.h"
+#include "inputManager_s.h"
 
 uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
 
 void inputManager::bind(const observer_t& observer, const event_t& ev)
 {
-  observer_t *ptr = const_cast<observer_t *>(&observer);
+  swap = first_free;             // Copy free ptr
+  first_free = swap->nxt;        // move free ptr
 
-  size_t idx = find(ptr);
-  if (idx > end) // Add only if not found
+  swap->obs = const_cast<observer_t *>(&observer);  // set obs in previously free ptr
+  swap->nxt = first_observer[ev];                   // Point next to current first observer
+  first_observer[ev] = swap;                        // Set current as first observer
+}
+
+void inputManager::unbind(const observer_t& observer, const event_t& ev)
+{
+  observer_t * ptr = const_cast<observer_t *>(&observer);
+  if (ptr == first_observer[ev]->obs)
   {
-    registered_observers[end].obs     = ptr;
-    registered_observers[end].nxt[ev] = first_observer[ev];
-    first_observer[ev]                = &registered_observers[end];
-    end++;
+    swap = first_observer[ev]->nxt; // copy first observer to nxt
+
+    // move current first observer to first_free
+    first_observer[ev]->nxt = first_free;
+    first_observer[ev]->obs = NULL;
+    first_free = first_observer[ev];
+
+    // set swap as first observer
+    first_observer[ev] = swap;
   }
-  else // re-wire
+  else
   {
-    registered_observers[idx].nxt[ev] = first_observer[ev];
-    first_observer[ev]                = &registered_observers[idx];
+    // find the father of the node to unbind
+    memoryNode *parent = find (ptr, ev);
+    if (parent == NULL)
+      return;
+
+    // Copy the node to unbind to swap and make the parent point to ther next node
+    swap        = parent->nxt;
+    parent->nxt = swap->nxt;
+
+    // The node ot unbind as first_free
+    swap->nxt  = first_free;
+    swap->obs  = NULL;
+    first_free = swap;
   }
 }
 
-void inputManager::clear()
+void inputManager::reset()
 {
-  end = 0;
-  for (size_t i=0; i < MAX_EVENTS; i++)
-  {
+  for (size_t i =0; i<MAX_OBSERVERS-1; i++)
+    registered_observers[i].nxt = (registered_observers + (i+1));
+  first_free = &registered_observers[0];
+  for (size_t i =0; i<MAX_EVENTS; i++)
     first_observer[i] = NULL;
-    for (size_t j=0; j < MAX_OBSERVERS; j++)
-      {
-        registered_observers[j].obs    = NULL;
-        registered_observers[j].nxt[i] = NULL;
-      }
-  }
 }
 
 void inputManager::notify()
@@ -79,19 +98,22 @@ void inputManager::notify()
       while (node != NULL)
       {
         node->obs->update(ev);
-        node = node->nxt[ev];
+        node = node->nxt;
       }
     }
   }
 }
 
-size_t inputManager::find(const observer_t* observer)
+memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
 {
-  size_t i = 0;
-  while (registered_observers[i].obs != observer)
-      if (++i > end)
-        break;
-  return i;
+  swap = first_observer[ev];
+  while (swap->nxt != NULL)
+  {
+    if (swap->nxt->obs == observer)
+      return swap;
+    swap = swap->nxt;
+  }
+  return NULL;
 }
 
 /// TO ERASE
