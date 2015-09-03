@@ -1,8 +1,6 @@
 /*
-  DSM2_tx implements the serial communication protocol used for operating
-  the RF modules that can be found in many DSM2-compatible transmitters.
-
   Copyrigt (C) 2012  Erik Elmore <erik@ironsavior.net>
+  Copyrigt (C) 2012  JuanPi Carbajal <ajunapi+dev@gmail.com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -15,8 +13,10 @@
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Based on mock_arduino, adapted for the dwenguino
 
 #include <sys/timeb.h>
 #include "mock_arduino.h"
