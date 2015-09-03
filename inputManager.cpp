@@ -82,7 +82,7 @@ void inputManager::notify()
   for (unsigned int i=0; i<MAX_EVENTS; i++)
   {
    // Check for onpress events
-    if (m_digitalRead(button[i]) == PRESSED)
+    if (digitalRead(button[i]) == PRESSED)
     {
       // FIXME: how to do this?
       switch (button[i])
@@ -115,14 +115,6 @@ memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
   }
   return NULL;
 }
-
-/// TO ERASE
-uint8_t digitalRead (unsigned int port)
-{
-//  if (port == SW_S)
-    return 1;
-//  return 0;
-};
 
 ostream& operator<<(ostream& os, const event_t& ev)
 {

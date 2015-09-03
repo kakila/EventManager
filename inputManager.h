@@ -33,7 +33,7 @@
 #define NOT_PRESSED 0
 #include <iostream>
 using namespace std;
-using readMethod = uint8_t (*)(unsigned int);
+extern uint8_t digitalRead(unsigned int);
 //**
 
 #ifndef MAX_OBS
@@ -74,17 +74,16 @@ class inputManager {
 
   private:
     memoryNode* find(const observer_t * observer,  const event_t& ev);
-    readMethod m_digitalRead;
   // Singelton pattern
   public:
-    static inputManager& getInstance(readMethod p_digitalRead)
+    static inputManager& getInstance()
     {
-        static inputManager instance(p_digitalRead); // Guaranteed to be destroyed, Instantiated on first use.
+        static inputManager instance; // Guaranteed to be destroyed, Instantiated on first use.
         return instance;
     }
 
    private:
-        inputManager(readMethod digitalRead):m_digitalRead{digitalRead}
+        inputManager()
         {
           for (size_t i =0; i<MAX_OBSERVERS-1; i++)
             registered_observers[i].nxt = (registered_observers + (i+1));

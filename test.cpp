@@ -37,14 +37,14 @@ void TestObserver::reset()
 }
 
 bool pressed = true;
-uint8_t mock_digitalRead(unsigned int pin)
+uint8_t digitalRead(unsigned int pin)
 {
     return pressed?PRESSED:NOT_PRESSED;
 }
 
 int main()
 {
-  inputManager& buttonManager = inputManager::getInstance(&mock_digitalRead);
+  inputManager& buttonManager = inputManager::getInstance();
 
   TestObserver observers[MAX_OBSERVERS] {};
 
