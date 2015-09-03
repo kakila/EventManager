@@ -82,7 +82,7 @@ void inputManager::notify()
   for (unsigned int i=0; i<MAX_EVENTS; i++)
   {
    // Check for onpress events
-    if (digitalRead(button[i]) == PRESSED)
+    if (m_digitalRead(button[i]) == PRESSED)
     {
       // FIXME: how to do this?
       switch (button[i])

@@ -1,8 +1,15 @@
 #include "inputManager.h"
 
-class Teller: public observer_t {
+class TestObserver: public observer_t {
   size_t _id;
+  bool m_wasCalled = false;
   public:
-    Teller() { static int id = 0; _id = id++; }
-    void update(const event_t& ev) {cout << "Observer " << _id << " catched event " << ev << endl;};
+    TestObserver();
+    void update(const event_t& ev);
+    bool wasCalled();
+    void reset();
+};
+
+class TestInputManager : public inputManager {
+
 };
