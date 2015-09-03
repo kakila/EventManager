@@ -35,15 +35,35 @@ void inputManager::bind(const observer_t& observer, const event_t& ev)
 
 void inputManager::unbind(const observer_t& observer, const event_t& ev)
 {
-  //NOT FINISHED
-  memoryNode *swap2 = find (const_cast<observer_t *>(&observer), ev);
+  observer_t * ptr = const_cast<observer_t *>(&observer);
+  if (ptr == first_observer[ev]->obs)
+  {
+    swap = first_observer[ev]->nxt; // copy first observer to nxt
 
-  swap       = swap2->nxt;
-  swap2->nxt = swap->nxt;
+    // move current first observer to first_free
+    first_observer[ev]->nxt = first_free;
+    first_observer[ev]->obs = NULL;
+    first_free = first_observer[ev];
 
-  swap->nxt  = first_free;
-  swap->obs  = NULL;
-  first_free = swap;
+    // set swap as first observer
+    first_observer[ev] = swap;
+  }
+  else
+  {
+    // find the father of the node to unbind
+    memoryNode *parent = find (ptr, ev);
+    if (parent == NULL)
+      return;
+
+    // Copy the node to unbind to swap and make the parent point to ther next node
+    swap        = parent->nxt;
+    parent->nxt = swap->nxt;
+
+    // The node ot unbind as first_free
+    swap->nxt  = first_free;
+    swap->obs  = NULL;
+    first_free = swap;
+  }
 }
 
 void inputManager::reset()
@@ -87,10 +107,13 @@ void inputManager::notify()
 memoryNode* inputManager::find(const observer_t * observer,  const event_t& ev)
 {
   swap = first_observer[ev];
-  while (swap != NULL)
+  while (swap->nxt != NULL)
   {
-    if (swap->nxt == )
+    if (swap->nxt->obs == observer)
+      return swap;
+    swap = swap->nxt;
   }
+  return NULL;
 }
 
 /// TO ERASE

@@ -69,8 +69,12 @@ class inputManager {
 
   public:
     void bind(const observer_t& observer, const event_t& ev);
+    void unbind(const observer_t& observer, const event_t& ev);
     void reset();
     void notify();
+
+  private:
+    memoryNode* find(const observer_t * observer,  const event_t& ev);
 
   // Singelton pattern
   public:

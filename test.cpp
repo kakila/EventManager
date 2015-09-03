@@ -26,6 +26,7 @@ int main()
 
   observer_t Obs0, Obs1;
 
+  cout << "First load" << endl;
   buttonManager.bind(Obs0, event_t::N);
   buttonManager.bind(Obs0, event_t::S);
 
@@ -37,11 +38,30 @@ int main()
 
   buttonManager.notify();
 
+  cout << endl;
+  cout << "Reset and reload" << endl;
   buttonManager.reset();
+
   buttonManager.bind(Obs0, event_t::N);
   buttonManager.bind(Obs0, event_t::W);
   buttonManager.bind(Obs1, event_t::N);
   buttonManager.bind(Obs1, event_t::W);
+
+  buttonManager.notify();
+
+  cout << endl;
+  cout << "Unbind" << endl;
+  buttonManager.unbind(Obs0, event_t::N); buttonManager.unbind(Obs0, event_t::N);
+  buttonManager.unbind(Obs0, event_t::W);
+  buttonManager.unbind(Obs1, event_t::N);
+
+  buttonManager.notify();
+
+  cout << endl;
+  cout << "Reconfigure" << endl;
+  buttonManager.bind(Obs0, event_t::W);
+  buttonManager.bind(Obs0, event_t::E);
+  buttonManager.bind(Obs1, event_t::S);
 
   buttonManager.notify();
 
