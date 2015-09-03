@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "test.h"
+#include "string"
 
 TestObserver::TestObserver()
 {
@@ -42,6 +43,19 @@ uint8_t digitalRead(unsigned int pin)
     return pressed?PRESSED:NOT_PRESSED;
 }
 
+void assertTrue(bool condition, std::string message)
+{
+    if (!condition)
+    {
+        cout<<message<< endl;
+        exit(1);
+    }
+}
+void assertFalse(bool condition, std::string message)
+{
+    assertTrue(!condition, message);
+}
+
 int main()
 {
   inputManager& buttonManager = inputManager::getInstance();
@@ -57,11 +71,7 @@ int main()
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    if (!observers[i].wasCalled())
-    {
-        cout<<"First Assert Failed: Observer " << i << " was not called!" << endl;
-        return 1;
-    }
+    assertTrue(observers[i].wasCalled(), std::string("First Assert Failed: Observer ") + std::to_string(i) + std::string(" was not called!"));
     observers[i].reset();
   }
 
@@ -70,11 +80,7 @@ int main()
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    if (observers[i].wasCalled())
-    {
-        cout<<"Second Assert Failed: Observer " << i << " was called but it wasn't supposed to!" << endl;
-        return 1;
-    }
+    assertFalse(observers[i].wasCalled(), std::string("Second Assert Failed: Observer ") + std::to_string(i) + std::string(" was called but it wasn't supposed to!"));
     observers[i].reset();
   }
 
@@ -86,12 +92,25 @@ int main()
   buttonManager.notify();
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    if (observers[i].wasCalled())
+    assertTrue(observers[i].wasCalled(), std::string("Third Assert Failed: Observer ") + std::to_string(i) + std::string(" was called but it wasn't supposed to!"));
+    observers[i].reset();
+  }
+
+  buttonManager.unbind(observers[3], event_t::N);
+  buttonManager.notify();
+
+  for (int i = 0; i<MAX_OBSERVERS; i++)
+  {
+    if (i == 3)
     {
-        cout<<"Third Assert Failed: Observer " << i << " was called but it wasn't supposed to!" << endl;
-        return 1;
+      assertFalse(observers[i].wasCalled(), std::string("Fourth Assert Failed: Observer ") + std::to_string(i) + std::string(" was called but it wasn't supposed to!"));
+    }
+    else
+    {
+      assertTrue(observers[i].wasCalled(), std::string("Fourth Assert Failed: Observer ") + std::to_string(i) + std::string(" wasn't called but it was supposed to!"));
     }
   }
+
   cout << "All tests successful" << endl;
   return 0;
 /*  buttonManager.bind(Obs0, event_t::N);
