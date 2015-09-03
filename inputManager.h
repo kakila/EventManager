@@ -22,19 +22,7 @@
 #ifndef inputManager_h
 #define inputManager_h
 
-//Commemt all these for Arduino
-#include <cinttypes>
-#define SW_N 15
-#define SW_W 35
-#define SW_S 5
-#define SW_E 4
-#define SW_C 1
-#define PRESSED 1
-#define NOT_PRESSED 0
-#include <iostream>
-using namespace std;
 extern uint8_t digitalRead(unsigned int);
-//**
 
 #ifndef MAX_OBS
 #define MAX_OBSERVERS 10
@@ -74,6 +62,7 @@ class inputManager {
 
   private:
     memoryNode* find(const observer_t * observer,  const event_t& ev);
+
   // Singelton pattern
   public:
     static inputManager& getInstance()

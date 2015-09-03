@@ -18,7 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "inputManager.h"
 
 uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
