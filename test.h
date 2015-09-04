@@ -36,9 +36,11 @@ class TestEvent: public Event {
 };
 
 class TestEventPub: public Event_Publisher {
+    bool m_trigger = false;
   public:
     bool is_triggered();
     const Event* get_event();
+    void set_trigger(bool);
 };
 
 class TestInputManager : public inputManager {

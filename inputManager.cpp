@@ -25,6 +25,8 @@ inputManager::inputManager() {
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
   first_free = &registered_observers[0];
+  for (size_t i =0; i<MAX_EVENTS; i++)
+    registered_publishers[i] = nullptr;
 }; // Constructor? (the {} brackets) are needed here.
 void inputManager::bind(const observer_t& observer, const Event_Publisher& publisher)
 {
