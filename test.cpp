@@ -69,12 +69,11 @@ int main()
 
   TestObserver observers[MAX_OBSERVERS] {};
 
-  TestEventPub event1;
-  buttonManager.add_publisher(event1);
+  TestEventPub publisher1;
   cout << "First load" << endl;
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    buttonManager.bind(observers[i], event1);
+    buttonManager.bind(observers[i], publisher1);
   }
   buttonManager.update();
 
@@ -108,9 +107,9 @@ int main()
   //Bind all except number 3
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
-    buttonManager.bind(observers[i], event1);
+    buttonManager.bind(observers[i], publisher1);
   }
-  buttonManager.unbind(observers[3], event1);
+  buttonManager.unbind(observers[3], publisher1);
   buttonManager.update();
 
   for (int i = 0; i<MAX_OBSERVERS; i++)
@@ -128,7 +127,7 @@ int main()
   //Test dangerous stuff
   buttonManager.clear();
   buttonManager.clear();
-  buttonManager.unbind(observers[0], event1);
+  buttonManager.unbind(observers[0], publisher1);
 
   cout << "All tests successful" << endl;
   return 0;
