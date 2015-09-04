@@ -123,11 +123,12 @@ int inputManager::add_publisher (const Event_Publisher& publisher)
 {
   for (size_t i =0; i<MAX_EVENTS; i++)
   {
-       if (registered_publishers[i] == nullptr)
+       if (registered_publishers[i] == nullptr || registered_publishers[i] == &publisher)
        {
           registered_publishers[i] = const_cast<Event_Publisher *>(&publisher);
           return i;
        }
+
   }
   return -1;
 }
