@@ -89,9 +89,6 @@ class inputManager {
 
    private:
         inputManager();
-
-          for (size_t i =0; i<MAX_EVENTS; i++)
-            registered_publishers[i] = nullptr;
 };
 
 
