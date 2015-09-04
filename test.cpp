@@ -68,7 +68,7 @@ int main()
   TestObserver observers[MAX_OBSERVERS] {};
 
   TestEventPub event1;
-
+  buttonManager.add_publisher(event1);
   cout << "First load" << endl;
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {

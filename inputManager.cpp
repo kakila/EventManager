@@ -21,7 +21,11 @@
 #include "inputManager.h"
 
 uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
-
+inputManager::inputManager() {
+  for (size_t i =0; i<MAX_OBSERVERS-1; i++)
+    registered_observers[i].nxt = (registered_observers + (i+1));
+  first_free = &registered_observers[0];
+}; // Constructor? (the {} brackets) are needed here.
 void inputManager::bind(const observer_t& observer, const Event_Publisher& publisher)
 {
   int ev = add_publisher(publisher);
@@ -83,6 +87,8 @@ void inputManager::update()
   memoryNode *node;
   for (unsigned int i=0; i<MAX_EVENTS; i++)
   {
+    if (registered_publishers[i] == nullptr)
+      continue;
     if (registered_publishers[i]->is_triggered())
     {
       const Event* new_event = registered_publishers[i]->get_event();
