@@ -30,20 +30,28 @@ class TestObserver: public observer_t {
     void reset();
 };
 
-class TestEvent: public Event
+class TestEvent1: public Event
 {
   // A dummy event class
   public:
     const int get_type() const {return 1;};
 };
 
-class TestEventPub: public Event_Publisher {
+class TestEvent2: public Event
+{
+  // A dummy event class
+  public:
+    const int get_type() const {return 2;};
+};
+
+template<class T>
+class TestEventPublisher: public Event_Publisher {
   bool m_trigger = false;
-  TestEvent event;
+  T event;
 
   public:
   bool is_triggered();
-  const Event* get_event() const;
+  const T* get_event() const;
   void set_trigger(bool);
 
 };

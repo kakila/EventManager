@@ -40,14 +40,16 @@ void TestObserver::reset()
     m_wasCalled = false;
 }
 
-bool TestEventPub::is_triggered()
+template<class T>
+bool TestEventPublisher<T>::is_triggered()
 {
   if (digitalRead(SW_S) == PRESSED)
     return true;
   return false;
 }
 
-const Event* TestEventPub::get_event() const
+template<class T>
+const T* TestEventPublisher<T>::get_event() const
 {
   return &event;
 }
@@ -66,13 +68,13 @@ void assertFalse(bool condition, std::string message)
     assertTrue(!condition, message);
 }
 
-int main()
+bool testSinglePublisher()
 {
   inputManager& buttonManager = inputManager::getInstance();
-
   TestObserver observers[MAX_OBSERVERS] {};
 
-  TestEventPub publisher1;
+  TestEventPublisher<TestEvent1> publisher1;
+
   cout << "First load" << endl;
   for (int i = 0; i<MAX_OBSERVERS; i++)
   {
@@ -126,12 +128,52 @@ int main()
       assertTrue(observers[i].wasCalled(), std::string("Fourth Assert Failed: Observer ") + std::to_string(i) + std::string(" wasn't called but it was supposed to!"));
     }
   }
+  return true;
+}
+bool testDeleteWhenNotExists()
+{
+  inputManager& buttonManager = inputManager::getInstance();
+  TestObserver observer {};
+  TestEventPublisher<TestEvent1> publisher;
+  buttonManager.clear();
+  buttonManager.clear();
+  buttonManager.unbind(observer, publisher);
+  return true;
+}
+bool testMultiplePublishers()
+{
+  inputManager& buttonManager = inputManager::getInstance();
+  TestObserver observers[MAX_OBSERVERS] {};
 
+  TestEventPublisher<TestEvent1> publisher1;
+  TestEventPublisher<TestEvent2> publisher2;
+
+  cout << "First load" << endl;
+  for (int i = 0; i<MAX_OBSERVERS; i+=2)
+  {
+    buttonManager.bind(observers[i], publisher1);
+  }
+  for (int i = 1; i<MAX_OBSERVERS; i+=2)
+  {
+    buttonManager.bind(observers[i], publisher2);
+  }
+  buttonManager.update();
+
+  for (int i = 0; i<MAX_OBSERVERS; i+=2)
+  {
+    assertTrue(observers[i].wasCalled(), std::string("First Assert Failed: Observer ") + std::to_string(i) + std::string(" was not called"));
+    observers[i].reset();
+  }
+  return true;
+}
+int main()
+{
+  inputManager& buttonManager = inputManager::getInstance();
+  testSinglePublisher();
+  buttonManager.clear();
   //Test dangerous stuff
-  buttonManager.clear();
-  buttonManager.clear();
-  buttonManager.unbind(observers[0], publisher1);
-
+  testDeleteWhenNotExists();
+  testMultiplePublishers();
   cout << "All tests successful" << endl;
   return 0;
 }
