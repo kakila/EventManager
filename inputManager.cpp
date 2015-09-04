@@ -113,3 +113,26 @@ memoryNode* inputManager::find_observer(const observer_t * observer,  const int&
   }
   return nullptr;
 }
+
+int inputManager::add_publisher (const Event_Publisher& publisher)
+{
+  for (size_t i =0; i<MAX_EVENTS; i++)
+  {
+       if (registered_publishers[i] == nullptr)
+       {
+          registered_publishers[i] = const_cast<Event_Publisher *>(&publisher);
+          return i;
+       }
+  }
+  return -1;
+}
+
+int inputManager::find_publisher (const Event_Publisher& publisher)
+{
+  for (size_t i =0; i<MAX_EVENTS; i++)
+  {
+       if (registered_publishers[i] == &publisher)
+          return i;
+  }
+  return -1;
+}

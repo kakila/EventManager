@@ -41,9 +41,11 @@ void TestObserver::reset()
 
 bool TestEventPub::is_triggered()
 {
+  if (digitalRead(SW_S) == PRESSED)
+    return true;
   return false;
 };
-const Event* TestEventPub:: get_event()
+const Event* TestEventPub::get_event()
 {
   return nullptr;
 };
