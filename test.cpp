@@ -40,11 +40,6 @@ void TestObserver::reset()
     m_wasCalled = false;
 }
 
-TestEventPub::TestEventPub()
-{
-  event = &TestEvent();
-}
-
 bool TestEventPub::is_triggered()
 {
   if (digitalRead(SW_S) == PRESSED)
@@ -54,7 +49,7 @@ bool TestEventPub::is_triggered()
 
 const Event* TestEventPub::get_event() const
 {
-  return event;
+  return &event;
 }
 
 void assertTrue(bool condition, std::string message)

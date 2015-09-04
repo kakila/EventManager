@@ -30,25 +30,22 @@ class TestObserver: public observer_t {
     void reset();
 };
 
-class TestEventPub: public Event_Publisher {
-  public:
-    class TestEvent;
-  private:
-    TestEvent* event;
-    bool m_trigger = false;
-
-  public:
-    TestEventPub();
-    bool is_triggered();
-    const Event* get_event() const;
-    void set_trigger(bool);
-};
-
-class TestEventPub::TestEvent: public Event
+class TestEvent: public Event
 {
   // A dummy event class
   public:
-    const int get_type() {return 1;};
+    const int get_type() const {return 1;};
+};
+
+class TestEventPub: public Event_Publisher {
+  bool m_trigger = false;
+  TestEvent event;
+
+  public:
+  bool is_triggered();
+  const Event* get_event() const;
+  void set_trigger(bool);
+
 };
 
 class TestInputManager : public inputManager {

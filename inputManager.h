@@ -34,25 +34,35 @@
 #define MAX_EVENTS 5
 #endif
 
+// e do not want polymorphic destruction of these interfaces
+// Protected destructors as in guideline #4
+// http://www.gotw.ca/publications/mill18.htm
+
 class Event
 {
-public:
-  virtual ~Event() {}
-  virtual const int get_type() const;
+  protected:
+    ~Event(){};
+
+  public:
+//  virtual ~Event() = 0;
+    virtual const int get_type() const = 0;
 };
 
 class Event_Publisher {
-public:
-  virtual ~Event_Publisher() {}
-  virtual bool is_triggered() = 0;
-  virtual const Event* get_event() const = 0;
+  protected:
+    ~Event_Publisher() {};
+
+  public:
+    virtual bool is_triggered() = 0;
+    virtual const Event* get_event() const = 0;
 };
 
-
 class observer_t {
+  protected:
+    ~observer_t() {}
+
   public:
     // pure virtual function providing interface framework.
-    virtual ~observer_t() {}
     virtual void notify(const Event *) = 0;
 };
 
@@ -90,6 +100,5 @@ class inputManager {
    private:
         inputManager();
 };
-
 
 #endif
