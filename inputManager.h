@@ -76,8 +76,8 @@ class inputManager {
 
   private:
     memoryNode* find_observer (const observer_t * observer, const int& event);
-    int add_publisher (const Event_Publisher& publisher){return -1;};
-    int find_publisher (const Event_Publisher& publisher){return -1;};
+    int add_publisher (const Event_Publisher& publisher);
+    int find_publisher (const Event_Publisher& publisher);
 
   // Singelton pattern
   public:
@@ -93,6 +93,9 @@ class inputManager {
           for (size_t i =0; i<MAX_OBSERVERS-1; i++)
             registered_observers[i].nxt = (registered_observers + (i+1));
           first_free = &registered_observers[0];
+
+          for (size_t i =0; i<MAX_EVENTS; i++)
+            registered_publishers[i] = nullptr;
         }; // Constructor? (the {} brackets) are needed here.
 };
 
