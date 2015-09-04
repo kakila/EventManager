@@ -1,11 +1,13 @@
 CPP = g++
 CPP_FLAGS = -Wall -std=c++11
 
-PROGRAM = test.out
-OBJECTS = mock_dwenguino.o inputManager.o test.o
+PROGRAM = test.out demo.out
+OBJECTS = mock_dwenguino.o inputManager.o
+TEST_OBJECTS = $(OBJECTS) test.o 
+DEMO_OBJECTS = $(OBJECTS) demo.o
 SOURCES = $(wildcard *.cpp) $(wildcard *.h)
 
-all: $(OCT_FILES) $(PROGRAM) $(SOURCES)
+all: $(PROGRAM)
 
 debug: CPP_FLAGS += -DDEBUG -g
 debug: all
@@ -13,7 +15,10 @@ debug: all
 %.o: %.cpp
 	$(CPP) $(CPP_FLAGS) -c $< -o $@
 
-test.out: $(OBJECTS)
+test.out: $(TEST_OBJECTS)
+	$(CPP) $(CPP_FLAGS) $^ -o $@
+
+demo.out: $(DEMO_OBJECTS)
 	$(CPP) $(CPP_FLAGS) $^ -o $@
 
 clean:

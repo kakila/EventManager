@@ -34,10 +34,9 @@
 #define MAX_EVENTS 5
 #endif
 
-// e do not want polymorphic destruction of these interfaces
+// We do not want polymorphic destruction of these interfaces
 // Protected destructors as in guideline #4
 // http://www.gotw.ca/publications/mill18.htm
-
 class Event
 {
   protected:
