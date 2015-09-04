@@ -39,6 +39,15 @@ void TestObserver::reset()
     m_wasCalled = false;
 }
 
+bool TestEventPub::is_triggered()
+{
+  return false;
+};
+const Event* TestEventPub:: get_event()
+{
+  return nullptr;
+};
+
 void assertTrue(bool condition, std::string message)
 {
     if (!condition)

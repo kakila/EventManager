@@ -32,15 +32,13 @@ class TestObserver: public observer_t {
 
 class TestEvent: public Event {
   public:
-    TestEvent(){};
     const int get_type() {return -1;};
 };
 
 class TestEventPub: public Event_Publisher {
   public:
-    TestEventPub(){};
-    bool is_triggered() {return false;};
-    const Event* get_event(){return nullptr;};
+    bool is_triggered();
+    const Event* get_event();
 };
 
 class TestInputManager : public inputManager {
