@@ -25,9 +25,10 @@ TestObserver::TestObserver()
 {
     static int id = 0; _id = id++;
 }
-void TestObserver::notify(const Event* ev)
+void TestObserver::notify(const Event * ev)
  {
      m_wasCalled = true;
+     cout << "Event type: " << ev->get_type() << endl;
 }
 bool TestObserver::wasCalled()
 {
@@ -39,16 +40,22 @@ void TestObserver::reset()
     m_wasCalled = false;
 }
 
+TestEventPub::TestEventPub()
+{
+  event = &TestEvent();
+}
+
 bool TestEventPub::is_triggered()
 {
   if (digitalRead(SW_S) == PRESSED)
     return true;
   return false;
-};
-const Event* TestEventPub::get_event()
+}
+
+const Event* TestEventPub::get_event() const
 {
-  return nullptr;
-};
+  return event;
+}
 
 void assertTrue(bool condition, std::string message)
 {
@@ -58,6 +65,7 @@ void assertTrue(bool condition, std::string message)
         exit(1);
     }
 }
+
 void assertFalse(bool condition, std::string message)
 {
     assertTrue(!condition, message);

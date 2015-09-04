@@ -38,14 +38,14 @@ class Event
 {
 public:
   virtual ~Event() {}
-  virtual const int get_type() = 0;
+  virtual const int get_type() const;
 };
 
 class Event_Publisher {
 public:
   virtual ~Event_Publisher() {}
   virtual bool is_triggered() = 0;
-  virtual const Event* get_event() = 0;
+  virtual const Event* get_event() const = 0;
 };
 
 
@@ -53,7 +53,7 @@ class observer_t {
   public:
     // pure virtual function providing interface framework.
     virtual ~observer_t() {}
-    virtual void notify(const Event* ev) = 0;
+    virtual void notify(const Event *) = 0;
 };
 
 struct memoryNode {

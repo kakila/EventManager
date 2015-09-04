@@ -7,6 +7,9 @@ SOURCES = $(wildcard *.cpp) $(wildcard *.h)
 
 all: $(OCT_FILES) $(PROGRAM) $(SOURCES)
 
+debug: CPP_FLAGS += -DDEBUG -g
+debug: all
+
 %.o: %.cpp
 	$(CPP) $(CPP_FLAGS) -c $< -o $@
 

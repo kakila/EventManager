@@ -34,6 +34,9 @@ inputManager::inputManager() {
 void inputManager::bind(const observer_t& observer, const Event_Publisher& publisher)
 {
   int ev = add_publisher(publisher);
+  if (ev == -1) // Couldn't add
+    return;
+
   swap = first_free;             // Copy free ptr
   first_free = swap->nxt;        // move free ptr
 
@@ -128,7 +131,6 @@ int inputManager::add_publisher (const Event_Publisher& publisher)
           registered_publishers[i] = const_cast<Event_Publisher *>(&publisher);
           return i;
        }
-
   }
   return -1;
 }
