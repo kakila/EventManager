@@ -19,30 +19,30 @@
  */
 
 #include "inputManager.h"
+enum event_t : uint8_t {N,W,S,E,C};
 
-class buttonType: public Event
+class buttonEventType: public Event
 {
-  char name;
   uint8_t port;
+  char name;
   public:
-    buttonType(const char& b);
-    const char& get_name() const { return name;}
-    const int get_type() const {return 0;};
+    buttonEventType(const event_t& b);
     const uint8_t& get_port() const {return port;};
+    const char& get_name() const {return name;};
 };
 
 class buttonAction: public observer_t
 {
   public:
     buttonAction() {};
-    void notify(const buttonType * b);
+    void notify(const Event & b);
 };
 
 class buttonOnPress: public Event_Publisher
 {
-  buttonType button;
+  buttonEventType button;
   public:
-    buttonOnPress(const char& b): button(b){};
+    buttonOnPress(const event_t& b): button(b){};
     bool is_triggered();
-    const buttonType* get_event() const;
+    const Event& get_event() const;
 };

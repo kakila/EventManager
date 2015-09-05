@@ -25,7 +25,7 @@ class TestObserver: public observer_t {
   bool m_wasCalled = false;
   public:
     TestObserver();
-    void notify(const Event* ev);
+    void notify(const Event& ev);
     bool wasCalled();
     void reset();
 };
@@ -34,14 +34,14 @@ class TestEvent1: public Event
 {
   // A dummy event class
   public:
-    const int get_type() const {return 1;};
+    TestEvent1(): Event(1) {};
 };
 
 class TestEvent2: public Event
 {
   // A dummy event class
   public:
-    const int get_type() const {return 2;};
+    TestEvent2(): Event(2) {};
 };
 
 template<class T>
@@ -51,7 +51,7 @@ class TestEventPublisher: public Event_Publisher {
 
   public:
   bool is_triggered();
-  const T* get_event() const;
+  const T& get_event() const;
   void set_trigger(bool);
 
 };

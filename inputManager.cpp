@@ -99,7 +99,7 @@ void inputManager::update()
       continue;
     if (registered_publishers[i]->is_triggered())
     {
-      const Event* new_event = registered_publishers[i]->get_event();
+      const Event& new_event = registered_publishers[i]->get_event();
       node = first_observer[i];
       while (node != nullptr)
       {

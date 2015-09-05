@@ -20,22 +20,29 @@
 
 #include "demo.h"
 
-buttonType::buttonType(const char& b)
+buttonEventType::buttonEventType(const event_t& b): Event(b)
 {
-  name = b;
-  switch (name)
+  switch (b)
   {
-    case 'N': port = SW_N; break;
-    case 'W': port = SW_W; break;
-    case 'S': port = SW_S; break;
-    case 'E': port = SW_E; break;
-    case 'C': port = SW_C; break;
+    case event_t::N: port = SW_N; name = 'N'; break;
+    case event_t::W: port = SW_W; name = 'W'; break;
+    case event_t::S: port = SW_S; name = 'S'; break;
+    case event_t::E: port = SW_E; name = 'E'; break;
+    case event_t::C: port = SW_C; name = 'C'; break;
   }
+
 }
 
-void buttonAction::notify(const buttonType * ev)
+void buttonAction::notify(const Event & ev)
 {
-     cout << "Button pressed: " << ev->get_name() << endl;
+
+    if (ev.get_type() == event_t::N)
+      // Extra filter for contextual action
+      cout << "Button pressed: N" << endl;
+      // Extra filter to override base class methods
+      cout << "Button pressed: " <<
+              static_cast<const buttonEventType&>(ev).get_name() << endl;
+
 }
 
 bool buttonOnPress::is_triggered()
@@ -45,9 +52,9 @@ bool buttonOnPress::is_triggered()
   return false;
 }
 
-const buttonType* buttonOnPress::get_event() const
+const Event& buttonOnPress::get_event() const
 {
-  return &button;
+  return button;
 }
 
 int main()
@@ -55,7 +62,7 @@ int main()
   // SETUP
   inputManager& manager = inputManager::getInstance();
   buttonAction tell_button;
-  buttonOnPress N_press('N');
+  buttonOnPress N_press(event_t::N);
 
   manager.bind(tell_button, N_press);
   cout << "Press button [N,W,S,E,C]"<<endl;
@@ -66,7 +73,7 @@ int main()
   {
     cin >> input;
     pressed = false;
-    if (input == 'N')
+    if (input == 'N' || input == 'n')
       pressed = true;
 
     manager.update();

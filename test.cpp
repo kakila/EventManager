@@ -25,10 +25,10 @@ TestObserver::TestObserver()
 {
     static int id = 0; _id = id++;
 }
-void TestObserver::notify(const Event * ev)
+void TestObserver::notify(const Event & ev)
  {
      m_wasCalled = true;
-     cout << "Event type: " << ev->get_type() << endl;
+     cout << "Event type: " << int(ev.get_type()) << endl;
 }
 bool TestObserver::wasCalled()
 {
@@ -49,9 +49,9 @@ bool TestEventPublisher<T>::is_triggered()
 }
 
 template<class T>
-const T* TestEventPublisher<T>::get_event() const
+const T& TestEventPublisher<T>::get_event() const
 {
-  return &event;
+  return event;
 }
 
 void assertTrue(bool condition, std::string message)

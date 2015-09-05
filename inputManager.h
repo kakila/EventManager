@@ -34,26 +34,28 @@
 #define MAX_EVENTS 5
 #endif
 
+class Event
+{
+//  protected:
+//    ~Event(){};
+
+  const uint8_t type;
+
+  public:
+    Event(const uint8_t& t): type(t) {};
+    const uint8_t& get_type() const {return type;};
+};
+
 // We do not want polymorphic destruction of these interfaces
 // Protected destructors as in guideline #4
 // http://www.gotw.ca/publications/mill18.htm
-class Event
-{
-  protected:
-    ~Event(){};
-
-  public:
-//  virtual ~Event() = 0;
-    virtual const int get_type() const = 0;
-};
-
 class Event_Publisher {
   protected:
     ~Event_Publisher() {};
 
   public:
     virtual bool is_triggered() = 0;
-    virtual const Event* get_event() const = 0;
+    virtual const Event& get_event() const = 0;
 };
 
 class observer_t {
@@ -62,7 +64,7 @@ class observer_t {
 
   public:
     // pure virtual function providing interface framework.
-    virtual void notify(const Event *) = 0;
+    virtual void notify(const Event&) = 0;
 };
 
 struct memoryNode {
