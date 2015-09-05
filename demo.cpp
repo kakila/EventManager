@@ -39,7 +39,7 @@ void buttonAction::notify(const Event & ev)
     if (ev.get_type() == event_t::N)
       // Extra filter for contextual action
       cout << "Button pressed: N" << endl;
-      // Extra filter to override base class methods
+      // Extra filter to extend base class methods
       cout << "Button pressed: " <<
               static_cast<const buttonEventType&>(ev).get_name() << endl;
 
