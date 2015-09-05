@@ -110,7 +110,7 @@ void inputManager::update()
   }
 }
 
-memoryNode* inputManager::find_observer(const observer_t * observer,  const int& ev)
+inputManager::memoryNode* inputManager::find_observer(const observer_t * observer,  const int& ev)
 {
   swap = first_observer[ev];
   while (swap->nxt != nullptr)

@@ -67,12 +67,12 @@ class observer_t {
     virtual void notify(const Event&) = 0;
 };
 
-struct memoryNode {
-  observer_t *obs = nullptr;
-  memoryNode *nxt = nullptr;
-};
-
 class inputManager {
+  struct memoryNode {
+    observer_t *obs = nullptr;
+    memoryNode *nxt = nullptr;
+  };
+
   memoryNode registered_observers[MAX_OBSERVERS];
   memoryNode *first_observer[MAX_EVENTS];
   memoryNode *first_free;
