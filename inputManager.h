@@ -55,12 +55,12 @@ class Event_Publisher {
 
   public:
     virtual bool is_triggered() = 0;
-    virtual const Event& get_event() const = 0;
+    virtual const Event &get_event() const = 0;
 };
 
-class observer_t {
+class IObserver {
   protected:
-    ~observer_t() {}
+    ~IObserver() {}
 
   public:
     // pure virtual function providing interface framework.
@@ -69,7 +69,7 @@ class observer_t {
 
 class inputManager {
   struct memoryNode {
-    observer_t *obs = nullptr;
+    IObserver *obs = nullptr;
     memoryNode *nxt = nullptr;
   };
 
@@ -80,13 +80,13 @@ class inputManager {
   Event_Publisher *registered_publishers[MAX_EVENTS];
 
   public:
-    void bind(const observer_t& observer, const Event_Publisher& publisher);
-    void unbind(const observer_t& observer, const Event_Publisher& publisher);
+    void bind(const IObserver& observer, const Event_Publisher& publisher);
+    void unbind(const IObserver& observer, const Event_Publisher& publisher);
     void clear();
     void update();
 
   private:
-    memoryNode* find_observer (const observer_t * observer, const int& event);
+    memoryNode* find_observer (const IObserver * observer, const int& event);
     int add_publisher (const Event_Publisher& publisher);
     int find_publisher (const Event_Publisher& publisher);
 

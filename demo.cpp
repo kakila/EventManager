@@ -20,49 +20,61 @@
 
 #include "demo.h"
 
-buttonEventType::buttonEventType(const event_t& b): Event(b)
+ButtonPressingEvent::ButtonPressingEvent(const button_name& b): Event(b), name("Button n pressed")
 {
+  char button_name_char;
   switch (b)
   {
-    case event_t::N: port = SW_N; name = 'N'; break;
-    case event_t::W: port = SW_W; name = 'W'; break;
-    case event_t::S: port = SW_S; name = 'S'; break;
-    case event_t::E: port = SW_E; name = 'E'; break;
-    case event_t::C: port = SW_C; name = 'C'; break;
+    case button_name::N: button_name_char = 'N'; break;
+    case button_name::W: button_name_char = 'W'; break;
+    case button_name::S: button_name_char = 'S'; break;
+    case button_name::E: button_name_char = 'E'; break;
+    case button_name::C: button_name_char = 'C'; break;
   }
-
+  name[7] = button_name_char;
 }
 
-void buttonAction::notify(const Event & ev)
-{
 
-    if (ev.get_type() == event_t::N)
+
+void ButtonListener::notify(const Event & ev)
+{
+    if (ev.get_type() == button_name::N)
       // Extra filter for contextual action
       cout << "Button pressed: N" << endl;
       // Extra filter to extend base class methods
       cout << "Button pressed: " <<
-              static_cast<const buttonEventType&>(ev).get_name() << endl;
-
+              static_cast<const ButtonPressingEvent&>(ev).get_name() << endl;
 }
 
-bool buttonOnPress::is_triggered()
+ButtonOnPressingPublisher::ButtonOnPressing(button_name type):button_type(type)
 {
-  if (digitalRead(button.get_port()) == PRESSED)
-    return true;
-  return false;
+  switch (type)
+  {
+    case button_name::N: port = SW_N; break;
+    case button_name::W: port = SW_W; break;
+    case button_name::S: port = SW_S; break;
+    case button_name::E: port = SW_E; break;
+    case button_name::C: port = SW_C; break;
+  }
+  event = new ButtonPressingEvent(button_type);
 }
 
-const Event& buttonOnPress::get_event() const
+bool ButtonOnPressingPublisher::is_triggered()
 {
-  return button;
+  return digitalRead(port) == PRESSED;
+}
+
+const Event &ButtonOnPressingPublisher::get_event() const
+{
+  return *event;
 }
 
 int main()
 {
   // SETUP
   inputManager& manager = inputManager::getInstance();
-  buttonAction tell_button;
-  buttonOnPress N_press(event_t::N);
+  ButtonListener tell_button;
+  ButtonOnPressingPublisher N_press(button_name::N);
 
   manager.bind(tell_button, N_press);
   cout << "Press button [N,W,S,E,C]"<<endl;

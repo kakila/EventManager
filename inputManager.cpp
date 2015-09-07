@@ -31,7 +31,7 @@ inputManager::inputManager() {
     registered_publishers[i] = nullptr;
 };
 
-void inputManager::bind(const observer_t& observer, const Event_Publisher& publisher)
+void inputManager::bind(const IObserver& observer, const Event_Publisher& publisher)
 {
   int ev = add_publisher(publisher);
   if (ev == -1) // Couldn't add
@@ -40,17 +40,17 @@ void inputManager::bind(const observer_t& observer, const Event_Publisher& publi
   swap = first_free;             // Copy free ptr
   first_free = swap->nxt;        // move free ptr
 
-  swap->obs = const_cast<observer_t *>(&observer);  // set obs in previously free ptr
+  swap->obs = const_cast<IObserver *>(&observer);  // set obs in previously free ptr
   swap->nxt = first_observer[ev];                   // Point next to current first observer
   first_observer[ev] = swap;                        // Set current as first observer
 }
 
-void inputManager::unbind(const observer_t& observer, const Event_Publisher& publisher)
+void inputManager::unbind(const IObserver& observer, const Event_Publisher& publisher)
 {
   int ev = find_publisher(publisher);
   if (ev == -1 || first_observer[ev] == nullptr)
     return;
-  observer_t * ptr = const_cast<observer_t *>(&observer);
+  IObserver * ptr = const_cast<IObserver *>(&observer);
   if (ptr == first_observer[ev]->obs)
   {
     swap = first_observer[ev]->nxt; // copy first observer to nxt
@@ -110,7 +110,7 @@ void inputManager::update()
   }
 }
 
-inputManager::memoryNode* inputManager::find_observer(const observer_t * observer,  const int& ev)
+inputManager::memoryNode* inputManager::find_observer(const IObserver * observer,  const int& ev)
 {
   swap = first_observer[ev];
   while (swap->nxt != nullptr)

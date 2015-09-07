@@ -20,7 +20,7 @@
 
 #include "inputManager.h"
 
-class TestObserver: public observer_t {
+class TestObserver: public IObserver {
   size_t _id;
   bool m_wasCalled = false;
   public:
