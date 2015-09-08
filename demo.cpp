@@ -72,9 +72,11 @@ int main()
   // SETUP
   inputManager& manager = inputManager::getInstance();
   ButtonListener tell_button;
-  ButtonOnPressingPublisher N_press(button_name::N);
+//  ButtonOnPressingPublisher N_press(button_name::N);
+  ButtonPressingEvent N_press(button_name::N);
+  ButtonOnPressingPublisher is_N_pressed(N_press);
 
-  manager.bind(tell_button, N_press);
+  manager.bind(tell_button, is_N_pressed);
   cout << "Press button [N,W,S,E,C]"<<endl;
 
   // LOOP
