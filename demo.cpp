@@ -25,11 +25,11 @@ ButtonPressingEvent::ButtonPressingEvent(const button_name& b): Event(b), name("
   char button_name_char;
   switch (b)
   {
-    case button_name::N: button_name_char = 'N'; break;
-    case button_name::W: button_name_char = 'W'; break;
-    case button_name::S: button_name_char = 'S'; break;
-    case button_name::E: button_name_char = 'E'; break;
-    case button_name::C: button_name_char = 'C'; break;
+    case button_name::N: button_name_char = 'N'; port = SW_N; break;
+    case button_name::W: button_name_char = 'W'; port = SW_W; break;
+    case button_name::S: button_name_char = 'S'; port = SW_S; break;
+    case button_name::E: button_name_char = 'E'; port = SW_E; break;
+    case button_name::C: button_name_char = 'C'; port = SW_C; break;
   }
   name[7] = button_name_char;
 }
@@ -41,27 +41,25 @@ void ButtonListener::notify(const Event & ev)
     if (ev.get_type() == button_name::N)
       // Extra filter for contextual action
       cout << "Button pressed: N" << endl;
-      // Extra filter to extend base class methods
-      cout << "Button pressed: " <<
-              static_cast<const ButtonPressingEvent&>(ev).get_name() << endl;
 }
 
-ButtonOnPressingPublisher::ButtonOnPressing(button_name type):button_type(type)
+//button_type(type),
+ButtonOnPressingPublisher::ButtonOnPressingPublisher(ButtonPressingEvent type): event(&type)
 {
-  switch (type)
-  {
-    case button_name::N: port = SW_N; break;
-    case button_name::W: port = SW_W; break;
-    case button_name::S: port = SW_S; break;
-    case button_name::E: port = SW_E; break;
-    case button_name::C: port = SW_C; break;
-  }
-  event = new ButtonPressingEvent(button_type);
+//  switch (type)
+//  {
+//    case button_name::N: port = SW_N; break;
+//    case button_name::W: port = SW_W; break;
+//    case button_name::S: port = SW_S; break;
+//    case button_name::E: port = SW_E; break;
+//    case button_name::C: port = SW_C; break;
+//  }
+//  event = new ButtonPressingEvent(button_type);
 }
 
 bool ButtonOnPressingPublisher::is_triggered()
 {
-  return digitalRead(port) == PRESSED;
+  return digitalRead(event->get_port()) == PRESSED;
 }
 
 const Event &ButtonOnPressingPublisher::get_event() const

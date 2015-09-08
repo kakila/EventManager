@@ -25,10 +25,12 @@ class ButtonPressingEvent: public Event
 {
   button_name button;
   string name;
+  uint8_t port;
   public:
     ButtonPressingEvent(const button_name& b);
     const button_name& get_button_name() const {return button;};
     const string get_name() const {return name;};
+    const uint8_t get_port() const {return port;};
 };
 
 class ButtonListener: public IObserver
@@ -40,11 +42,13 @@ class ButtonListener: public IObserver
 
 class ButtonOnPressingPublisher: public Event_Publisher
 {
-  button_name button_type;
-  Event *event;
-  uint8_t port;
+//  button_name button_type;
+//  Event *event;
+//  uint8_t port;
+  ButtonPressingEvent* event;
   public:
-    ButtonOnPressingPublisher(button_name type);
+    //ButtonOnPressingPublisher(button_name type);
+    ButtonOnPressingPublisher(ButtonPressingEvent type);
     bool is_triggered();
     const Event &get_event() const;
 };
