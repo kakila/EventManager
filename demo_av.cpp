@@ -1,5 +1,5 @@
 /*
- * demo.cpp
+ * demo_av.cpp
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -22,24 +22,29 @@
 
 void ButtonListener::notify(const Event & ev)
 {
-    LEDS = LEDS?0:0b10000000;
+      const ButtonEvent & e = static_cast<const ButtonEvent &>(ev);
+      for (unsigned int i=0; i<5; i++)
+      {
+        if (e.button[i])
+          LEDS ^= pattern[i];
+      }
 }
 
-ButtonOnPressingPublisher::ButtonOnPressingPublisher(button_name type)
+ButtonOnPressingPublisher::ButtonOnPressingPublisher(): port({SW_N,SW_W,SW_S,SW_E,SW_C})
 {
-  switch (type)
-  {
-    case button_name::N: port = SW_N; break;
-    case button_name::W: port = SW_W; break;
-    case button_name::S: port = SW_S; break;
-    case button_name::E: port = SW_E; break;
-    case button_name::C: port = SW_C; break;
-  }
+  event = new ButtonEvent();
 }
 
 bool ButtonOnPressingPublisher::is_triggered()
 {
-  return (digitalRead(port) == PRESSED);
+  bool x = false;
+  ButtonEvent * ev = static_cast<ButtonEvent *>(event);
+  for (unsigned int i=0; i<5; i++)
+  {
+    x |= (digitalRead(port[i]) == PRESSED);
+    ev->button[i] = (digitalRead(port[i]) == PRESSED);
+  }
+  return x;
 }
 
 const Event &ButtonOnPressingPublisher::get_event() const
@@ -48,14 +53,13 @@ const Event &ButtonOnPressingPublisher::get_event() const
 }
 
 /////////////////////////////////////////////////////////////////////
-ButtonListener tell_button;
-ButtonOnPressingPublisher is_N_pressed(button_name::N);
+ButtonListener on_pressed;
+ButtonOnPressingPublisher is_pressed;
 
 void setup()
 {
   initDwenguino();
-  dwenguinoManager.bind(tell_button, is_N_pressed);
-  dwenguinoLCD.backLightOn();
+  dwenguinoManager.bind(on_pressed, is_pressed);
   dwenguinoLCD.print("Reset!");
   delay(500);
   dwenguinoLCD.clear();
@@ -65,7 +69,7 @@ void setup()
 unsigned int sinceLast = 0;
 void loop()
 {
-  if (millis()- sinceLast > 100)
+  if (millis()- sinceLast > 200)
   {
     sinceLast = millis();
     dwenguinoManager.update();
