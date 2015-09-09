@@ -22,7 +22,14 @@
 
 void ButtonListener::notify(const Event & ev)
 {
-    LEDS = LEDS?0:0b10000000;
+    switch (ev.get_type())
+    {
+      case button_name::N: LEDS = LEDS ^ 0b10000000; break;
+      case button_name::S: LEDS = LEDS ^ 0b00000001; break;
+      case button_name::W: LEDS = LEDS ^ 0b00100000; break;
+      case button_name::E: LEDS = LEDS ^ 0b00000100; break;
+      case button_name::C: LEDS = LEDS ^ 0b00011000; break;
+    }
 }
 
 ButtonOnPressingPublisher::ButtonOnPressingPublisher(button_name type)
@@ -35,6 +42,7 @@ ButtonOnPressingPublisher::ButtonOnPressingPublisher(button_name type)
     case button_name::E: port = SW_E; break;
     case button_name::C: port = SW_C; break;
   }
+  event = new Event(type);
 }
 
 bool ButtonOnPressingPublisher::is_triggered()
@@ -48,14 +56,22 @@ const Event &ButtonOnPressingPublisher::get_event() const
 }
 
 /////////////////////////////////////////////////////////////////////
-ButtonListener tell_button;
+
+ButtonListener on_pressed;
 ButtonOnPressingPublisher is_N_pressed(button_name::N);
+ButtonOnPressingPublisher is_S_pressed(button_name::S);
+ButtonOnPressingPublisher is_W_pressed(button_name::W);
+ButtonOnPressingPublisher is_E_pressed(button_name::E);
+ButtonOnPressingPublisher is_C_pressed(button_name::C);
 
 void setup()
 {
   initDwenguino();
-  dwenguinoManager.bind(tell_button, is_N_pressed);
-  dwenguinoLCD.backLightOn();
+  dwenguinoManager.bind(on_pressed, is_N_pressed);
+  dwenguinoManager.bind(on_pressed, is_S_pressed);
+  dwenguinoManager.bind(on_pressed, is_W_pressed);
+  dwenguinoManager.bind(on_pressed, is_E_pressed);
+  dwenguinoManager.bind(on_pressed, is_C_pressed);
   dwenguinoLCD.print("Reset!");
   delay(500);
   dwenguinoLCD.clear();
@@ -65,13 +81,12 @@ void setup()
 unsigned int sinceLast = 0;
 void loop()
 {
-  if (millis()- sinceLast > 100)
+  if (millis()- sinceLast > 200)
   {
     sinceLast = millis();
     dwenguinoManager.update();
   }
 }
-
 int main ()
 {
   setup();
