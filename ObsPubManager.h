@@ -1,5 +1,5 @@
 /*
- * inputManager.h
+ * ObsPubManager.h
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -19,11 +19,13 @@
  */
 
 
-#ifndef inputManager_h
-#define inputManager_h
+#ifndef ObsPubManager_h
+#define ObsPubManager_h
 
-#ifndef ARDUINO_MAIN
+#ifndef ARDUINO
 #include "mock_dwenguino.h"
+#else
+#include <Dwenguino.h>
 #endif
 
 #ifndef MAX_OBS
@@ -34,42 +36,39 @@
 #define MAX_EVENTS 5
 #endif
 
+// Minimal Event interface
 class Event
 {
-//  protected:
-//    ~Event(){};
-
-  const uint8_t type;
+  uint8_t type;
 
   public:
-    Event(const uint8_t& t): type(t) {};
-    const uint8_t& get_type() const {return type;};
+    Event(const uint8_t & b): type(b) {};
+    const uint8_t get_type() const {return type;};
 };
 
 // We do not want polymorphic destruction of these interfaces
 // Protected destructors as in guideline #4
 // http://www.gotw.ca/publications/mill18.htm
-class Event_Publisher {
+class EventPublisher {
   protected:
-    ~Event_Publisher() {};
+    ~EventPublisher() {};
 
   public:
     virtual bool is_triggered() = 0;
     virtual const Event &get_event() const = 0;
 };
 
-class IObserver {
+class EventObserver {
   protected:
-    ~IObserver() {}
+    ~EventObserver() {}
 
   public:
-    // pure virtual function providing interface framework.
     virtual void notify(const Event&) = 0;
 };
 
-class inputManager {
+class ObsPubManager {
   struct memoryNode {
-    IObserver *obs = nullptr;
+    EventObserver *obs = nullptr;
     memoryNode *nxt = nullptr;
   };
 
@@ -77,29 +76,30 @@ class inputManager {
   memoryNode *first_observer[MAX_EVENTS];
   memoryNode *first_free;
   memoryNode *swap;
-  Event_Publisher *registered_publishers[MAX_EVENTS];
+  EventPublisher *registered_publishers[MAX_EVENTS];
 
   public:
-    void bind(const IObserver& observer, const Event_Publisher& publisher);
-    void unbind(const IObserver& observer, const Event_Publisher& publisher);
+    void bind(const EventObserver& observer, const EventPublisher& publisher);
+    void unbind(const EventObserver& observer, const EventPublisher& publisher);
     void clear();
     void update();
 
   private:
-    memoryNode* find_observer (const IObserver * observer, const int& event);
-    int add_publisher (const Event_Publisher& publisher);
-    int find_publisher (const Event_Publisher& publisher);
+    memoryNode* find_observer (const EventObserver * observer, const int& event);
+    int add_publisher (const EventPublisher& publisher);
+    int find_publisher (const EventPublisher& publisher);
 
   // Singelton pattern
   public:
-    static inputManager& getInstance()
+    static ObsPubManager& getInstance()
     {
-        static inputManager instance; // Guaranteed to be destroyed, Instantiated on first use.
+        static ObsPubManager instance; // Guaranteed to be destroyed, Instantiated on first use.
         return instance;
     }
 
    private:
-        inputManager();
+        ObsPubManager();
 };
 
+extern ObsPubManager& dwenguinoManager;
 #endif

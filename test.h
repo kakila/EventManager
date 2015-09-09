@@ -18,9 +18,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "inputManager.h"
+#include "ObsPubManager.h"
 
-class TestObserver: public IObserver {
+class TestObserver: public EventObserver {
   size_t _id;
   bool m_wasCalled = false;
   public:
@@ -45,7 +45,7 @@ class TestEvent2: public Event
 };
 
 template<class T>
-class TestEventPublisher: public Event_Publisher {
+class TestEventPublisher: public EventPublisher {
   bool m_trigger = false;
   T event;
 
@@ -56,6 +56,6 @@ class TestEventPublisher: public Event_Publisher {
 
 };
 
-class TestInputManager : public inputManager {
+class TestObsPubManager : public ObsPubManager {
 
 };

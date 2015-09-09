@@ -22,6 +22,16 @@
 #include "mock_dwenguino.h"
 
 
+void showLEDS()
+{
+  for (unsigned int i = 1;  i < 8; i++)
+    if (LEDS & (0b00000001 << i))
+      cout << "*";
+    else
+      cout << "-";
+  cout << int(LEDS) << endl;
+}
+
 timeb t_start;
 unsigned long millis() {
   timeb t_now;
@@ -34,12 +44,26 @@ void delay(unsigned long ms) {
   while(millis() - start < ms){}
 }
 
-void initialize_mock_arduino() {
+void initDwenguino() {
   ftime(&t_start);
+  LEDS=0;
 }
 
 bool pressed = true;
 uint8_t digitalRead(uint8_t pin)
 {
-    return pressed?PRESSED:NOT_PRESSED;
+// C++ doesn't have nonblocking IO
+//    char x;
+//    cin>>x;
+//    switch (x)
+//    {
+//      case 'S': pressed = (SW_S == pin); break;
+//      case 'N': pressed = (SW_N == pin); break;
+//      case 'W': pressed = (SW_W == pin); break;
+//      case 'E': pressed = (SW_E == pin); break;
+//      case 'C': pressed = (SW_C == pin); break;
+//    }
+  return pressed?PRESSED:NOT_PRESSED;
 }
+
+BufferedLCD& dwenguinoLCD = BufferedLCD::getInstance();

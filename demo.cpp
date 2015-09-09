@@ -20,46 +20,26 @@
 
 #include "demo.h"
 
-ButtonPressingEvent::ButtonPressingEvent(const button_name& b): Event(b), name("Button n pressed")
-{
-  char button_name_char;
-  switch (b)
-  {
-    case button_name::N: button_name_char = 'N'; port = SW_N; break;
-    case button_name::W: button_name_char = 'W'; port = SW_W; break;
-    case button_name::S: button_name_char = 'S'; port = SW_S; break;
-    case button_name::E: button_name_char = 'E'; port = SW_E; break;
-    case button_name::C: button_name_char = 'C'; port = SW_C; break;
-  }
-  name[7] = button_name_char;
-}
-
-
-
 void ButtonListener::notify(const Event & ev)
 {
-    if (ev.get_type() == button_name::N)
-      // Extra filter for contextual action
-      cout << "Button pressed: N" << endl;
+    LEDS = LEDS?0:0b10000000;
 }
 
-//button_type(type),
-ButtonOnPressingPublisher::ButtonOnPressingPublisher(ButtonPressingEvent type): event(&type)
+ButtonOnPressingPublisher::ButtonOnPressingPublisher(button_name type)
 {
-//  switch (type)
-//  {
-//    case button_name::N: port = SW_N; break;
-//    case button_name::W: port = SW_W; break;
-//    case button_name::S: port = SW_S; break;
-//    case button_name::E: port = SW_E; break;
-//    case button_name::C: port = SW_C; break;
-//  }
-//  event = new ButtonPressingEvent(button_type);
+  switch (type)
+  {
+    case button_name::N: port = SW_N; break;
+    case button_name::W: port = SW_W; break;
+    case button_name::S: port = SW_S; break;
+    case button_name::E: port = SW_E; break;
+    case button_name::C: port = SW_C; break;
+  }
 }
 
 bool ButtonOnPressingPublisher::is_triggered()
 {
-  return digitalRead(event->get_port()) == PRESSED;
+  return (digitalRead(port) == PRESSED);
 }
 
 const Event &ButtonOnPressingPublisher::get_event() const
@@ -67,28 +47,33 @@ const Event &ButtonOnPressingPublisher::get_event() const
   return *event;
 }
 
-int main()
+ButtonListener tell_button;
+ButtonOnPressingPublisher is_N_pressed(button_name::N);
+
+void setup()
 {
-  // SETUP
-  inputManager& manager = inputManager::getInstance();
-  ButtonListener tell_button;
-//  ButtonOnPressingPublisher N_press(button_name::N);
-  ButtonPressingEvent N_press(button_name::N);
-  ButtonOnPressingPublisher is_N_pressed(N_press);
+  initDwenguino();
+  dwenguinoManager.bind(tell_button, is_N_pressed);
+  dwenguinoLCD.backLightOn();
+  dwenguinoLCD.print("Reset!");
+  delay(500);
+  dwenguinoLCD.clear();
+  LEDS = 0;
+}
 
-  manager.bind(tell_button, is_N_pressed);
-  cout << "Press button [N,W,S,E,C]"<<endl;
-
-  // LOOP
-  char input;
-  while (true)
+unsigned int sinceLast = 0;
+void loop()
+{
+  if (millis()- sinceLast > 100)
   {
-    cin >> input;
-    pressed = false;
-    if (input == 'N' || input == 'n')
-      pressed = true;
-
-    manager.update();
+    sinceLast = millis();
+    dwenguinoManager.update();
   }
+}
+
+int main ()
+{
+  setup();
+  while (true) {loop(); showLEDS();};
   return 0;
 }

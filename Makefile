@@ -2,7 +2,7 @@ CPP = g++
 CPP_FLAGS = -Wall -std=c++11
 
 PROGRAM = test.out demo.out
-OBJECTS = mock_dwenguino.o inputManager.o
+OBJECTS = mock_dwenguino.o ObsPubManager.o
 TEST_OBJECTS = $(OBJECTS) test.o 
 DEMO_OBJECTS = $(OBJECTS) demo.o
 SOURCES = $(wildcard *.cpp) $(wildcard *.h)

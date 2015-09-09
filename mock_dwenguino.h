@@ -29,6 +29,12 @@ using namespace std;
 #define lowByte(w) ((unsigned char) ((w) & 0xff))
 #define highByte(w) ((unsigned char) ((w) >> 8))
 
+typedef unsigned char byte;
+
+// LEDS
+static byte LEDS;
+void showLEDS();
+
 // Mapping of analog pins as digital I/O
 static const uint8_t A0 = 24;
 static const uint8_t A1 = 25;
@@ -62,7 +68,37 @@ unsigned long millis();
 // WMath.cpp
 long map(long, long, long, long, long);
 
-void initialize_mock_arduino();
+void initDwenguino();
+
+
+class BufferedLCD
+{
+  const char *BL;
+  bool is_on;
+
+  public:
+    void print(const int & x)   const {cout << (is_on?BL:"|") << x << "\33[0m" << endl;};
+    void print(const char & x)  const {cout << (is_on?BL:"|") << x << "\33[0m" << endl;};
+    void print(const char* x)   const {cout << (is_on?BL:"|") << x << "\33[0m" << endl;};
+    void print(const float & x) const {cout << (is_on?BL:"|") << x << "\33[0m" << endl;};
+
+    void backLightOn(){is_on=true;};
+    void backLightOff(){is_on=false;};
+    void clear(){};
+
+  // Singelton pattern
+  public:
+    static BufferedLCD& getInstance()
+    {
+        static BufferedLCD instance; // Guaranteed to be destroyed, Instantiated on first use.
+        return instance;
+    }
+
+   private:
+     BufferedLCD(): BL("\33[7m"){};
+};
+
+extern BufferedLCD& dwenguinoLCD;
 
 
 #endif

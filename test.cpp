@@ -70,7 +70,7 @@ void assertFalse(bool condition, std::string message)
 
 bool testSinglePublisher()
 {
-  inputManager& buttonManager = inputManager::getInstance();
+  ObsPubManager& buttonManager = ObsPubManager::getInstance();
   TestObserver observers[MAX_OBSERVERS] {};
 
   TestEventPublisher<TestEvent1> publisher1;
@@ -132,7 +132,7 @@ bool testSinglePublisher()
 }
 bool testDeleteWhenNotExists()
 {
-  inputManager& buttonManager = inputManager::getInstance();
+  ObsPubManager& buttonManager = ObsPubManager::getInstance();
   TestObserver observer {};
   TestEventPublisher<TestEvent1> publisher;
   buttonManager.clear();
@@ -142,7 +142,7 @@ bool testDeleteWhenNotExists()
 }
 bool testMultiplePublishers()
 {
-  inputManager& buttonManager = inputManager::getInstance();
+  ObsPubManager& buttonManager = ObsPubManager::getInstance();
   TestObserver observers[MAX_OBSERVERS] {};
 
   TestEventPublisher<TestEvent1> publisher1;
@@ -168,7 +168,7 @@ bool testMultiplePublishers()
 }
 int main()
 {
-  inputManager& buttonManager = inputManager::getInstance();
+  ObsPubManager& buttonManager = ObsPubManager::getInstance();
   testSinglePublisher();
   buttonManager.clear();
   //Test dangerous stuff

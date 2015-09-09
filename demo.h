@@ -18,37 +18,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "inputManager.h"
-enum button_name: uint8_t {N,W,S,E,C};
+#include "ObsPubManager.h"
 
-class ButtonPressingEvent: public Event
-{
-  button_name button;
-  string name;
-  uint8_t port;
-  public:
-    ButtonPressingEvent(const button_name& b);
-    const button_name& get_button_name() const {return button;};
-    const string get_name() const {return name;};
-    const uint8_t get_port() const {return port;};
-};
+enum button_name {N,W,S,E,C};
 
-class ButtonListener: public IObserver
+class ButtonListener: public EventObserver
 {
   public:
     ButtonListener() {};
     void notify(const Event & b);
 };
 
-class ButtonOnPressingPublisher: public Event_Publisher
+class ButtonOnPressingPublisher: public EventPublisher
 {
-//  button_name button_type;
-//  Event *event;
-//  uint8_t port;
-  ButtonPressingEvent* event;
+  Event *event;
+  uint8_t port;
   public:
-    //ButtonOnPressingPublisher(button_name type);
-    ButtonOnPressingPublisher(ButtonPressingEvent type);
+    ButtonOnPressingPublisher(button_name type);
     bool is_triggered();
     const Event &get_event() const;
 };

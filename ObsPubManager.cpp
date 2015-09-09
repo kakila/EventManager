@@ -1,5 +1,5 @@
 /*
- * inputManager.cpp
+ * ObsPubManager.cpp
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -18,11 +18,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "inputManager.h"
+#include "ObsPubManager.h"
 
-uint8_t button[] = {SW_N, SW_W, SW_S, SW_E, SW_C};
-
-inputManager::inputManager() {
+ObsPubManager::ObsPubManager() {
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
   first_free = &registered_observers[0];
@@ -31,7 +29,7 @@ inputManager::inputManager() {
     registered_publishers[i] = nullptr;
 };
 
-void inputManager::bind(const IObserver& observer, const Event_Publisher& publisher)
+void ObsPubManager::bind(const EventObserver& observer, const EventPublisher& publisher)
 {
   int ev = add_publisher(publisher);
   if (ev == -1) // Couldn't add
@@ -40,17 +38,17 @@ void inputManager::bind(const IObserver& observer, const Event_Publisher& publis
   swap = first_free;             // Copy free ptr
   first_free = swap->nxt;        // move free ptr
 
-  swap->obs = const_cast<IObserver *>(&observer);  // set obs in previously free ptr
+  swap->obs = const_cast<EventObserver *>(&observer);  // set obs in previously free ptr
   swap->nxt = first_observer[ev];                   // Point next to current first observer
   first_observer[ev] = swap;                        // Set current as first observer
 }
 
-void inputManager::unbind(const IObserver& observer, const Event_Publisher& publisher)
+void ObsPubManager::unbind(const EventObserver& observer, const EventPublisher& publisher)
 {
   int ev = find_publisher(publisher);
   if (ev == -1 || first_observer[ev] == nullptr)
     return;
-  IObserver * ptr = const_cast<IObserver *>(&observer);
+  EventObserver * ptr = const_cast<EventObserver *>(&observer);
   if (ptr == first_observer[ev]->obs)
   {
     swap = first_observer[ev]->nxt; // copy first observer to nxt
@@ -81,7 +79,7 @@ void inputManager::unbind(const IObserver& observer, const Event_Publisher& publ
   }
 }
 
-void inputManager::clear()
+void ObsPubManager::clear()
 {
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
@@ -90,7 +88,7 @@ void inputManager::clear()
     first_observer[i] = nullptr;
 }
 
-void inputManager::update()
+void ObsPubManager::update()
 {
   memoryNode *node;
   for (unsigned int i=0; i<MAX_EVENTS; i++)
@@ -110,7 +108,7 @@ void inputManager::update()
   }
 }
 
-inputManager::memoryNode* inputManager::find_observer(const IObserver * observer,  const int& ev)
+ObsPubManager::memoryNode* ObsPubManager::find_observer(const EventObserver * observer,  const int& ev)
 {
   swap = first_observer[ev];
   while (swap->nxt != nullptr)
@@ -122,20 +120,20 @@ inputManager::memoryNode* inputManager::find_observer(const IObserver * observer
   return nullptr;
 }
 
-int inputManager::add_publisher (const Event_Publisher& publisher)
+int ObsPubManager::add_publisher (const EventPublisher& publisher)
 {
   for (size_t i =0; i<MAX_EVENTS; i++)
   {
        if (registered_publishers[i] == nullptr || registered_publishers[i] == &publisher)
        {
-          registered_publishers[i] = const_cast<Event_Publisher *>(&publisher);
+          registered_publishers[i] = const_cast<EventPublisher *>(&publisher);
           return i;
        }
   }
   return -1;
 }
 
-int inputManager::find_publisher (const Event_Publisher& publisher)
+int ObsPubManager::find_publisher (const EventPublisher& publisher)
 {
   for (size_t i =0; i<MAX_EVENTS; i++)
   {
@@ -144,3 +142,5 @@ int inputManager::find_publisher (const Event_Publisher& publisher)
   }
   return -1;
 }
+
+ObsPubManager& dwenguinoManager = ObsPubManager::getInstance();
