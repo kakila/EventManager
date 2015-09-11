@@ -1,7 +1,7 @@
-CallbckPubManager
+EventManager
 ================
 
-A library for attaching callback to Event publishers for the Dwenguino/Arduino platform.
+A library for attaching *Callbacks* to *Event Publishers* for the Dwenguino/Arduino platform.
 
 Introduction
 ------------
