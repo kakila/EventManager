@@ -1,7 +1,9 @@
 #include <Wire.h>
 #include <LiquidCrystal.h>
 #include <Dwenguino.h>
-#include <CallbckPubManager.h>
+#include <EventManager.h>
+
+////// Start definitions ////////
 
 enum button_name {N,W,S,E,C};
 
@@ -41,7 +43,8 @@ void notify(const Event * ev)
 }
 
 ////////////////////////////////
-callback ButtonListener = notify;
+
+Callback ButtonListener = notify;
 ButtonOnPressingPublisher is_N_pressed(button_name::N);
 ButtonOnPressingPublisher is_S_pressed(button_name::S);
 ButtonOnPressingPublisher is_W_pressed(button_name::W);
@@ -69,4 +72,3 @@ void loop()
       dwenguinoManager.update();
     }
 }
-
