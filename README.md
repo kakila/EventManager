@@ -14,9 +14,9 @@ when X goes up. Something like:
 manager.bind (ledOn, X_up)
 ```
 
-Here `manager` is the object that knows the relation betwen the *callback*[1](#callback) `ledOn` 
+Here `manager` is the object that knows the relation betwen the *callback*[[1]](#callback) `ledOn` 
 and the *event publisher* `X_up`.
 
 <a name="callback">[1]</a>: Callback is a fancy name for functions that are called 
-when something happens
+when something happens.
 
