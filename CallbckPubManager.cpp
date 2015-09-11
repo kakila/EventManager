@@ -29,7 +29,7 @@ CallbckPubManager::CallbckPubManager() {
     registered_publishers[i] = nullptr;
 };
 
-void CallbckPubManager::bind(const callback & observer, const EventPublisher& publisher)
+void CallbckPubManager::bind(const Callback & observer, const EventPublisher& publisher)
 {
   int ev = add_publisher(publisher);
   if (ev == -1) // Couldn't add
@@ -43,12 +43,12 @@ void CallbckPubManager::bind(const callback & observer, const EventPublisher& pu
   first_observer[ev] = swap;                        // Set current as first observer
 }
 
-void CallbckPubManager::unbind(const callback & observer, const EventPublisher& publisher)
+void CallbckPubManager::unbind(const Callback & observer, const EventPublisher& publisher)
 {
   int ev = find_publisher(publisher);
   if (ev == -1 || first_observer[ev] == nullptr)
     return;
-  callback  ptr = observer;
+  Callback  ptr = observer;
   if (ptr == first_observer[ev]->obs)
   {
     swap = first_observer[ev]->nxt; // copy first observer to nxt
@@ -108,7 +108,7 @@ void CallbckPubManager::update()
   }
 }
 
-CallbckPubManager::memoryNode* CallbckPubManager::find_observer(const callback  & observer,  const int & ev)
+CallbckPubManager::memoryNode* CallbckPubManager::find_observer(const Callback  & observer,  const int & ev)
 {
   swap = first_observer[ev];
   while (swap->nxt != nullptr)

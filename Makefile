@@ -16,8 +16,8 @@ debug: all
 %.o: %.cpp
 	$(CPP) $(CPP_FLAGS) -c $^ -o $@
 
-test.out: $(TEST_OBJECTS)
-	$(CPP) $(CPP_FLAGS) $(CPP_LFLAGS) $^ -o $@
+#test.out: $(TEST_OBJECTS)
+#	$(CPP) $(CPP_FLAGS) $(CPP_LFLAGS) $^ -o $@
 
 demo.out: $(DEMO_OBJECTS)
 	$(CPP) $(CPP_FLAGS) $(CPP_LFLAGS) $^ -o $@

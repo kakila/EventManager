@@ -1,0 +1,39 @@
+########################################
+# Syntax Coloring Map For CallbckManager
+########################################
+
+###################################
+# Datatypes (KEYWORD1)
+###################################
+Event	KEYWORD1
+Callback	KEYWORD1
+EventPublisher	KEYWORD1
+CallbckPubManager	KEYWORD1
+
+###################################
+# Methods and Functions (KEYWORD2)
+###################################
+initDwenguino	KEYWORD2
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+# Event
+get_type	KEYWORD2
+
+# EventPublisher
+get_event	KEYWORD2
+is_triggered	KEYWORD2
+
+# CallcbkPubManager
+bind	KEYWORD2
+unbind	KEYWORD2
+clear	KEYWORD2
+update	KEYWORD2
+
+###################################
+# Constants (LITERAL1)
+###################################
+MAX_OBSERVERS	LITERAL1
+MAX_EVENTS	LITERAL1

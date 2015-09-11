@@ -48,7 +48,7 @@ class Event
     const uint8_t get_type() const {return type;};
 };
 
-typedef void (*callback)(const Event*);
+typedef void (*Callback)(const Event*);
 
 class EventPublisher {
   protected:
@@ -62,7 +62,7 @@ class EventPublisher {
 
 class CallbckPubManager {
   struct memoryNode {
-    callback obs = nullptr;
+    Callback obs = nullptr;
     memoryNode *nxt = nullptr;
   };
 
@@ -73,13 +73,13 @@ class CallbckPubManager {
   EventPublisher *registered_publishers[MAX_EVENTS];
 
   public:
-    void bind(const callback &observer, const EventPublisher &publisher);
-    void unbind(const callback &observer, const EventPublisher &publisher);
+    void bind(const Callback &observer, const EventPublisher &publisher);
+    void unbind(const Callback &observer, const EventPublisher &publisher);
     void clear();
     void update();
 
   private:
-    memoryNode* find_observer (const callback &observer, const int &event);
+    memoryNode* find_observer (const Callback &observer, const int &event);
     int add_publisher (const EventPublisher &publisher);
     int find_publisher (const EventPublisher &publisher);
 
