@@ -25,9 +25,8 @@
 #ifndef ARDUINO
 #include "mock_dwenguino.h"
 #else
-#include <Wire.h>
-#include <LiquidCrystal.h>
-#include <Dwenguino.h>
+#include <inttypes.h>
+#include <Arduino.h>
 #endif
 
 #ifndef MAX_OBS
