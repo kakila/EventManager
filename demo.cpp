@@ -1,5 +1,5 @@
 /*
- * demo.cpp
+ * demo_callbck.cpp
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -18,11 +18,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "demo.h"
+#include "demo_callbck.h"
 
-void ButtonListener::notify(const Event & ev)
+void notify(const Event * ev)
 {
-    switch (ev.get_type())
+    switch (ev->get_type())
     {
       case button_name::N: LEDS = LEDS ^ 0b10000000; break;
       case button_name::S: LEDS = LEDS ^ 0b00000001; break;
@@ -50,14 +50,9 @@ bool ButtonOnPressingPublisher::is_triggered()
   return (digitalRead(port) == PRESSED);
 }
 
-const Event &ButtonOnPressingPublisher::get_event() const
-{
-  return *event;
-}
-
 /////////////////////////////////////////////////////////////////////
 
-ButtonListener on_pressed;
+callback ButtonListener = notify;
 ButtonOnPressingPublisher is_N_pressed(button_name::N);
 ButtonOnPressingPublisher is_S_pressed(button_name::S);
 ButtonOnPressingPublisher is_W_pressed(button_name::W);
@@ -67,11 +62,11 @@ ButtonOnPressingPublisher is_C_pressed(button_name::C);
 void setup()
 {
   initDwenguino();
-  dwenguinoManager.bind(on_pressed, is_N_pressed);
-  dwenguinoManager.bind(on_pressed, is_S_pressed);
-  dwenguinoManager.bind(on_pressed, is_W_pressed);
-  dwenguinoManager.bind(on_pressed, is_E_pressed);
-  dwenguinoManager.bind(on_pressed, is_C_pressed);
+  c_dwenguinoManager.bind(ButtonListener, is_N_pressed);
+  c_dwenguinoManager.bind(ButtonListener, is_S_pressed);
+  c_dwenguinoManager.bind(ButtonListener, is_W_pressed);
+  c_dwenguinoManager.bind(ButtonListener, is_E_pressed);
+  c_dwenguinoManager.bind(ButtonListener, is_C_pressed);
   dwenguinoLCD.print("Reset!");
   delay(500);
   dwenguinoLCD.clear();
@@ -81,15 +76,23 @@ void setup()
 unsigned int sinceLast = 0;
 void loop()
 {
-  if (millis()- sinceLast > 200)
-  {
-    sinceLast = millis();
-    dwenguinoManager.update();
-  }
+    if (millis()- sinceLast > 200)
+    {
+      sinceLast = millis();
+      c_dwenguinoManager.update();
+    }
 }
+
+#ifndef ARDUINO
 int main ()
 {
+ // Not working in PC
   setup();
-  while (true) {loop(); showLEDS();};
+  while (true)
+  {
+    loop();
+    showLEDS();
+  }
   return 0;
 }
+#endif

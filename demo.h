@@ -1,5 +1,5 @@
 /*
- * demo.h
+ * demo_callbck.h
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -18,23 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ObsPubManager.h"
+#include "CallbckPubManager.h"
 
 enum button_name {N,W,S,E,C};
 
-class ButtonListener: public EventObserver
-{
-  public:
-    ButtonListener() {};
-    void notify(const Event & b);
-};
-
 class ButtonOnPressingPublisher: public EventPublisher
 {
-  Event *event;
   uint8_t port;
   public:
     ButtonOnPressingPublisher(button_name type);
     bool is_triggered();
-    const Event &get_event() const;
 };
