@@ -5,7 +5,7 @@ A library for attaching *Callbacks* to *Event Publishers* for the Dwenguino/Ardu
 
 Introduction
 ------------
-It is quite comon to associate a function call to an event.
+It is quite common to associate a function call to an event.
 For example, if pin **X** of the board goes **UP** one would like to turn a **LED** on.
 To do this we need an object (the Manager) that knows that function `ledOn` should be called
 when X goes up. Something like:
