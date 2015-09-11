@@ -4,7 +4,7 @@ class Publisher: public EventPublisher
 {
   uint8_t pin;
   unsigned int sinceLast;
-  
+
   public:
     // This is the constructor. It is called
     // whenever we create an instance of this class.
@@ -33,16 +33,16 @@ const int ledPin = 13;
 // All callbacks should receive a pointer to Event.
 // Here we do not use it because this is a silly example
 void writeHIGHtoPin(const Event * ev)
-{ 
+{
   static bool state = false; // just to remember the button state
   if (state)
   {
-    digitalWrite(ledPin, LOW); 
+    digitalWrite(ledPin, LOW);
     state = false;
   }
   else
   {
-    digitalWrite(ledPin, HIGH); 
+    digitalWrite(ledPin, HIGH);
     state = true;
   }
 }
@@ -51,7 +51,7 @@ void writeHIGHtoPin(const Event * ev)
 const int buttonPin = 2;
 // We create an instance of the class
 // saying that it should pulish events on buttonPin
-Publisher pin_is_high(buttonPin);
+Publisher pin_is_low(buttonPin);
 
 // We create the callback
 Callback ledOn = writeHIGHtoPin;
@@ -61,11 +61,10 @@ void setup()
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
   // We bind the callback and the event publisher
-  dwenguinoManager.bind(ledOn, pin_is_high);
+  dwenguinoManager.bind(ledOn, pin_is_low);
 }
 
 void loop()
 {
   dwenguinoManager.update();
 }
-

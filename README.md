@@ -76,7 +76,7 @@ void writeHIGHtoPin(const Event * ev)
 const int buttonPin = 2;
 // We create an instance of the class
 // saying that it should pulish events on buttonPin
-Publisher pin_is_high(buttonPin);
+Publisher pin_is_low(buttonPin);
 
 // We create the callback
 Callback ledOn = writeHIGHtoPin;
@@ -86,7 +86,7 @@ void setup()
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
   // We bind the callback and the event publisher
-  dwenguinoManager.bind(ledOn, pin_is_high);
+  dwenguinoManager.bind(ledOn, pin_is_low);
 }
 
 void loop()
