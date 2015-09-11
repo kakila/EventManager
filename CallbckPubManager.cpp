@@ -143,4 +143,4 @@ int CallbckPubManager::find_publisher (const EventPublisher& publisher)
   return -1;
 }
 
-CallbckPubManager& c_dwenguinoManager = CallbckPubManager::getInstance();
+CallbckPubManager& dwenguinoManager = CallbckPubManager::getInstance();

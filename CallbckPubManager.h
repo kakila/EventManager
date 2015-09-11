@@ -25,6 +25,8 @@
 #ifndef ARDUINO
 #include "mock_dwenguino.h"
 #else
+#include <Wire.h>
+#include <LiquidCrystal.h>
 #include <Dwenguino.h>
 #endif
 
@@ -93,5 +95,5 @@ class CallbckPubManager {
         CallbckPubManager();
 };
 
-extern CallbckPubManager& c_dwenguinoManager;
+extern CallbckPubManager& dwenguinoManager;
 #endif
