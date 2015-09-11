@@ -23,6 +23,7 @@
 
 #include <cinttypes>
 #include <iostream>
+
 using namespace std;
 
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
@@ -32,7 +33,7 @@ using namespace std;
 typedef unsigned char byte;
 
 // LEDS
-static byte LEDS;
+extern byte LEDS;
 void showLEDS();
 
 // Mapping of analog pins as digital I/O

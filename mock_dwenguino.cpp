@@ -21,15 +21,19 @@
 #include <sys/timeb.h>
 #include "mock_dwenguino.h"
 
+byte LEDS = 0;
 
 void showLEDS()
 {
-  for (unsigned int i = 1;  i < 8; i++)
-    if (LEDS & (0b00000001 << i))
+  cout << int(LEDS) << " ";
+  for (unsigned int i = 0;  i < 8; i++)
+  {
+    if ((LEDS & (0b10000000 >> i)) != 0)
       cout << "*";
     else
       cout << "-";
-  cout << int(LEDS) << endl;
+  }
+  cout << endl;
 }
 
 timeb t_start;
@@ -49,21 +53,26 @@ void initDwenguino() {
   LEDS=0;
 }
 
-bool pressed = true;
+bool pressed = false;
+void isButtonPressed()
+{
+    char x;
+    cin >> x;
+    if (x == 'S' ||
+        x == 'N' ||
+        x == 'W' ||
+        x == 'E' ||
+        x == 'C')
+        pressed = true;
+    else
+        pressed = false;
+}
 uint8_t digitalRead(uint8_t pin)
 {
-// C++ doesn't have nonblocking IO
-//    char x;
-//    cin>>x;
-//    switch (x)
-//    {
-//      case 'S': pressed = (SW_S == pin); break;
-//      case 'N': pressed = (SW_N == pin); break;
-//      case 'W': pressed = (SW_W == pin); break;
-//      case 'E': pressed = (SW_E == pin); break;
-//      case 'C': pressed = (SW_C == pin); break;
-//    }
-  return pressed?PRESSED:NOT_PRESSED;
+  isButtonPressed();
+  uint8_t ret = pressed?PRESSED:NOT_PRESSED;
+  pressed = false;
+  return ret;
 }
 
 BufferedLCD& dwenguinoLCD = BufferedLCD::getInstance();
