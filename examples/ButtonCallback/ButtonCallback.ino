@@ -24,7 +24,7 @@ class ButtonOnPressingPublisher: public EventPublisher
         event = new Event(type);
     };
 
-    bool is_triggered()
+    bool isTriggered()
     {
       return (digitalRead(port) == PRESSED);
     };
@@ -32,7 +32,7 @@ class ButtonOnPressingPublisher: public EventPublisher
 
 void notify(const Event * ev)
 {
-    switch (ev->get_type())
+    switch (ev->getType())
     {
       case button_name::N: LEDS = LEDS ^ 0b10000000; break;
       case button_name::S: LEDS = LEDS ^ 0b00000001; break;

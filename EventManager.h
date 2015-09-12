@@ -1,5 +1,5 @@
 /*
- * CallbckPubManager.h
+ * EventManager.h
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -19,13 +19,11 @@
  */
 
 
-#ifndef CallbckPubManager_h
-#define CallbckPubManager_h
+#ifndef EventManager_h
+#define EventManager_h
 
-#ifndef ARDUINO
-#include "mock_dwenguino.h"
-#else
 #include <inttypes.h>
+#ifdef ARDUINO
 #include <Arduino.h>
 #endif
 
@@ -44,7 +42,7 @@ class Event
 
   public:
     Event(const uint8_t & b): type(b) {};
-    const uint8_t get_type() const {return type;};
+    const uint8_t getType() const {return type;};
 };
 
 typedef void (*Callback)(const Event*);
@@ -54,9 +52,9 @@ class EventPublisher {
     Event *event;
 
   public:
-    const Event* get_event() const {return event;};
+    const Event* getEvent() const {return event;};
     // The following needs to be implemented by the user
-    virtual bool is_triggered() = 0;
+    virtual bool isTriggered() = 0;
 };
 
 class CallbckPubManager {

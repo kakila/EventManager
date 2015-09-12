@@ -1,5 +1,5 @@
 /*
- * CallbckPubManager.cpp
+ * EventManager.cpp
  *
  * Copyright (C) 2015 - Juanpi Carbajal <ajuanpi+dev@gmail.com>
  * Copyright (C) 2015 - Ezequiel Pozzo
@@ -20,9 +20,11 @@
 
 #include "EventManager.h"
 
-CallbckPubManager::CallbckPubManager() {
+CallbckPubManager::CallbckPubManager()
+{
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
+
   first_free = &registered_observers[0];
 
   for (size_t i =0; i<MAX_EVENTS; i++)
@@ -38,16 +40,18 @@ void CallbckPubManager::bind(const Callback & observer, const EventPublisher& pu
   swap = first_free;             // Copy free ptr
   first_free = swap->nxt;        // move free ptr
 
-  swap->obs = observer;  // set obs in previously free ptr
-  swap->nxt = first_observer[ev];                   // Point next to current first observer
-  first_observer[ev] = swap;                        // Set current as first observer
+  swap->obs = observer;             // set obs in previously free ptr
+  swap->nxt = first_observer[ev];   // Point next to current first observer
+  first_observer[ev] = swap;        // Set current as first observer
 }
 
 void CallbckPubManager::unbind(const Callback & observer, const EventPublisher& publisher)
 {
   int ev = find_publisher(publisher);
+
   if (ev == -1 || first_observer[ev] == nullptr)
     return;
+
   Callback  ptr = observer;
   if (ptr == first_observer[ev]->obs)
   {
@@ -83,7 +87,9 @@ void CallbckPubManager::clear()
 {
   for (size_t i =0; i<MAX_OBSERVERS-1; i++)
     registered_observers[i].nxt = (registered_observers + (i+1));
+
   first_free = &registered_observers[0];
+
   for (size_t i =0; i<MAX_EVENTS; i++)
     first_observer[i] = nullptr;
 }
@@ -95,9 +101,10 @@ void CallbckPubManager::update()
   {
     if (registered_publishers[i] == nullptr)
       continue;
-    if (registered_publishers[i]->is_triggered())
+
+    if (registered_publishers[i]->isTriggered())
     {
-      const Event *new_event = registered_publishers[i]->get_event();
+      const Event *new_event = registered_publishers[i]->getEvent();
       node = first_observer[i];
       while (node != nullptr)
       {
@@ -115,6 +122,7 @@ CallbckPubManager::memoryNode* CallbckPubManager::find_observer(const Callback  
   {
     if (swap->nxt->obs == observer)
       return swap;
+
     swap = swap->nxt;
   }
   return nullptr;

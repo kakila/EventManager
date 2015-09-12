@@ -39,7 +39,7 @@ class Publisher: public EventPublisher
     // Here we say if the event was triggered,
     // We check for a LOW in pin.
     // We check every 200 ms to allow human input
-    bool is_triggered()
+    bool isTriggered()
     {
        bool is_down = false;
        if (millis()- sinceLast > 200)
