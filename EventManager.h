@@ -27,7 +27,7 @@
 #include <Arduino.h>
 #endif
 
-#ifndef MAX_OBS
+#ifndef MAX_OBSERVERS
 #define MAX_OBSERVERS 10
 #endif
 
@@ -38,9 +38,8 @@
 // Minimal Event interface
 class Event
 {
-  uint8_t type;
-
   public:
+    uint8_t type;
     Event(const uint8_t & b): type(b) {};
     const uint8_t getType() const {return type;};
 };
