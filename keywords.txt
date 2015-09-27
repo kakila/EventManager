@@ -5,9 +5,9 @@
 ###################################
 # Datatypes (KEYWORD1)
 ###################################
-Event	KEYWORD1
-Callback	KEYWORD1
-EventPublisher	KEYWORD1
+Event				KEYWORD1
+Callback			KEYWORD1
+EventPublisher		KEYWORD1
 CallbckPubManager	KEYWORD1
 
 ###################################
@@ -17,7 +17,7 @@ CallbckPubManager	KEYWORD1
 get_type	KEYWORD2
 
 # EventPublisher
-get_event	KEYWORD2
+get_event		KEYWORD2
 is_triggered	KEYWORD2
 
 # CallcbkPubManager
@@ -29,10 +29,10 @@ update	KEYWORD2
 #######################################
 # Instances (KEYWORD2)
 #######################################
-dwenguinoManager    KEYWORD2
+dwenguinoManager	KEYWORD2
 
 ###################################
 # Constants (LITERAL1)
 ###################################
 MAX_OBSERVERS	LITERAL1
-MAX_EVENTS	LITERAL1
+MAX_EVENTS		LITERAL1
